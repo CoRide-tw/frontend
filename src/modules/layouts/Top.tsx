@@ -1,7 +1,7 @@
 import { Flex, Center } from "@chakra-ui/react";
 import type { PropsWithChildren } from "react";
 
-export default function TitleBarLayout({ children }: PropsWithChildren) {
+export default function TopLayout({ children }: PropsWithChildren) {
   return (
     <Flex direction="column">
       <Center
