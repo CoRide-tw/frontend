@@ -1,4 +1,5 @@
 import { extendTheme, type ThemeConfig } from "@chakra-ui/react";
+import { Inter } from "next/font/google";
 
 // customize Chakra theme
 const colors = {};
@@ -8,5 +9,11 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 
-const theme = extendTheme({ colors, config });
+const inter = Inter({ subsets: ["latin"] });
+
+const fonts = {
+  body: inter.style.fontFamily,
+};
+
+const theme = extendTheme({ colors, fonts, config });
 export default theme;
