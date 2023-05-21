@@ -9,7 +9,7 @@ import {
 import { useRef, useState } from "react";
 
 interface Props {
-  data?: any;
+  data?: DirectionsServiceProps["options"];
   width?: string;
   height?: string;
   draggable?: boolean;
@@ -78,10 +78,7 @@ export default function GoogleMapsCard({
         }}
       >
         {!onceRef.current && data && (
-          <DirectionsService
-            options={data as DirectionsServiceProps["options"]}
-            callback={directionsCallback}
-          />
+          <DirectionsService options={data} callback={directionsCallback} />
         )}
         {renderData && (
           <DirectionsRenderer
