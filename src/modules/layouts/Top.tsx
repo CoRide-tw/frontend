@@ -23,7 +23,7 @@ const ScrollArea = ({ children }: PropsWithChildren) => (
 
 export default function TopLayout({ children }: PropsWithChildren) {
   return (
-    <Flex direction="column" maxH="100vh" maxW="100vw">
+    <Flex direction="column" h="100vh" w="100vw">
       <TopBar />
       <ScrollArea>{children}</ScrollArea>
     </Flex>

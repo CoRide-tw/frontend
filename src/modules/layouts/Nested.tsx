@@ -42,7 +42,7 @@ export default function NestedLayout({
   const buttonCallback = backButtonCallback ?? (() => router.back());
 
   return (
-    <Flex direction="column" maxH="100vh" maxW="100vw">
+    <Flex direction="column" h="100vh" w="100vw">
       <TopBar title={title} buttonCallback={buttonCallback} />
       <ScrollArea>{children}</ScrollArea>
     </Flex>
