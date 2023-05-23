@@ -16,43 +16,50 @@ const TripPointsForm = ({ form }: { form: string }) => (
   </Flex>
 );
 
-const current = new Date();
-const anHourLater = new Date();
-anHourLater.setHours((current.getHours() + 1) % 24);
-
-const dateInputString = current.toLocaleDateString("fr-CA");
-const currentTimeInputString = current.toLocaleTimeString([], {
-  hour: "2-digit",
-  minute: "2-digit",
-  hour12: false,
-});
-const anHourLaterTimeInputString = anHourLater.toLocaleTimeString([], {
+const dateInputStringFormatter = Intl.DateTimeFormat("fr-CA");
+const timeInputStringFormatter = Intl.DateTimeFormat([], {
   hour: "2-digit",
   minute: "2-digit",
   hour12: false,
 });
 
-const WaitIntervalForm = ({ form }: { form: string }) => (
-  <Flex gap="16px" direction="column">
-    <FormGroupTitle>Waiting Interval</FormGroupTitle>
-    <Input form={form} type="date" name="date" defaultValue={dateInputString} />
-    <Flex direction="row" gap="16px">
+const WaitIntervalForm = ({ form }: { form: string }) => {
+  const current = new Date();
+  const anHourLater = new Date();
+  anHourLater.setHours((current.getHours() + 1) % 24);
+
+  const dateInputString = dateInputStringFormatter.format(current);
+  const currentTimeInputString = timeInputStringFormatter.format(current);
+  const anHourLaterTimeInputString =
+    timeInputStringFormatter.format(anHourLater);
+
+  return (
+    <Flex gap="16px" direction="column">
+      <FormGroupTitle>Waiting Interval</FormGroupTitle>
       <Input
         form={form}
-        type="time"
-        name="time-start"
-        defaultValue={currentTimeInputString}
+        type="date"
+        name="date"
+        defaultValue={dateInputString}
       />
-      <Flex align="center">~</Flex>
-      <Input
-        form={form}
-        type="time"
-        name="time-end"
-        defaultValue={anHourLaterTimeInputString}
-      />
+      <Flex direction="row" gap="16px">
+        <Input
+          form={form}
+          type="time"
+          name="time-start"
+          defaultValue={currentTimeInputString}
+        />
+        <Flex align="center">~</Flex>
+        <Input
+          form={form}
+          type="time"
+          name="time-end"
+          defaultValue={anHourLaterTimeInputString}
+        />
+      </Flex>
     </Flex>
-  </Flex>
-);
+  );
+};
 
 const CoRideInfoForm = ({ form }: { form: string }) => (
   <Flex gap="16px" direction="column">
