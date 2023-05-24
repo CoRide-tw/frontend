@@ -37,7 +37,12 @@ export default function ShareYourRideCard() {
             alignItems="center"
             position={"relative"}
           >
-            <Image alt="driver" src="/Driver.png" fill={true} />
+            <Image
+              alt="driver"
+              src="/Driver.png"
+              fill={true}
+              style={{ objectFit: "contain" }}
+            />
           </Flex>
         </Flex>
       </Link>
