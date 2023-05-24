@@ -52,7 +52,7 @@ export default function GoogleMapsCard({
 
   return (
     <Box
-      margin="20px"
+      width={width}
       bg="gray"
       height={height}
       borderRadius={"8px"}
@@ -62,7 +62,6 @@ export default function GoogleMapsCard({
         id="direction-example"
         mapContainerStyle={{
           height,
-          width,
           borderRadius: "8px",
         }}
         zoom={16}
