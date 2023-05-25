@@ -23,7 +23,7 @@ const data = {
   date: "2023-05-23",
 };
 //parse data for GoogleMapsCard
-const data2 = {
+const gMapData = {
   origin: data.origin,
   waypoints: data.waypoints,
   destination: data.destination,
