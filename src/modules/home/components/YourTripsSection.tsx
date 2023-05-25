@@ -44,7 +44,7 @@ export default function YourTripsSection() {
         direction={"column"}
         padding={"12px"}
       >
-        <GoogleMapsCard data={data2} height="150px" />
+        <GoogleMapsCard data={gMapData} height="150px" />
         <Text padding={"10px 0px"} color={"gray.400"}>
           {data.date}
           {"・"}
