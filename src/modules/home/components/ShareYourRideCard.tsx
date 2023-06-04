@@ -22,7 +22,8 @@ export default function ShareYourRideCard() {
           >
             <Text fontWeight={700}>Become a driver and pick up passengers</Text>
             <Button
-              bg="white"
+              colorScheme="white"
+              color={"black"}
               marginTop="10px"
               height="min-content"
               borderRadius="20px"
