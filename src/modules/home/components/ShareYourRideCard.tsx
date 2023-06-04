@@ -21,13 +21,7 @@ export default function ShareYourRideCard() {
             margin="20px"
           >
             <Text fontWeight={700}>Become a driver and pick up passengers</Text>
-            <Button
-              colorScheme="white"
-              color={"black"}
-              marginTop="10px"
-              height="min-content"
-              borderRadius="20px"
-            >
+            <Button marginTop="10px" height="min-content" borderRadius="20px">
               Share a ride
               <Icon as={AiOutlineArrowRight} margin="5px" />
             </Button>
