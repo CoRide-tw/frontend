@@ -2,7 +2,7 @@ import { Box, Text, Button, Flex } from "@chakra-ui/react";
 
 import { useState } from "react";
 import NestedLayout from "@/modules/layouts/Nested";
-import SavedLocation from "@/modules/settings/components/SavedLocation";
+
 import SavedVehicle from "@/modules/settings/components/SavedVehicle";
 
 const locationData = [
