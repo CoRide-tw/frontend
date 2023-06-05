@@ -46,7 +46,9 @@ export default function SavedVehicle({ vehicle, setVehicle }: Props) {
               })
             }
           />
-          <InputRightElement children={<HiOutlineSwitchHorizontal />} />
+          <InputRightElement>
+            <HiOutlineSwitchHorizontal />
+          </InputRightElement>
         </InputGroup>
 
         <FormLabel color="gray.500">Number</FormLabel>
