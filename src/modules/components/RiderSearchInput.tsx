@@ -4,9 +4,22 @@ import {
   Button,
   Center,
   Divider,
+  Flex,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+  useDisclosure,
   useToast,
+  Text,
 } from "@chakra-ui/react";
+import GoogleMapsCard from "./GoogleMapsCard";
+import { DirectionsServiceProps } from "@react-google-maps/api";
+import Link from "next/link";
+import path from "path";
 
 export default function RiderSearchInput() {
   const toast = useToast();
@@ -14,6 +27,7 @@ export default function RiderSearchInput() {
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [date, setDate] = useState<string>();
   const [time, setTime] = useState<string>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSearch = () => {
     if (pickupLocation === "" || dropoffLocation === "" || !date || !time) {
       toast({
@@ -27,6 +41,7 @@ export default function RiderSearchInput() {
 
       return;
     }
+    onOpen();
 
     // search api
   };
@@ -70,6 +85,55 @@ export default function RiderSearchInput() {
       <Button w="100%" bg="black" color="white" onClick={handleSearch}>
         Search
       </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody margin={"30px 0 0"}>
+            <GoogleMapsCard
+              data={{
+                origin: pickupLocation,
+                waypoints: [],
+                destination: dropoffLocation,
+                travelMode:
+                  "DRIVING" as DirectionsServiceProps["options"]["travelMode"],
+              }}
+              draggable={true}
+              width="100%"
+            />
+            <ModalCloseButton />
+            <Flex
+              direction={"column"}
+              margin={"10px 0"}
+              gap={2}
+              color={"gray.500"}
+            >
+              <Text>Pickup Location : {pickupLocation}</Text>
+              <Text>Dropoff Location : {dropoffLocation}</Text>
+              <Text>
+                Time : {date} {time}
+              </Text>
+            </Flex>
+          </ModalBody>
+
+          <ModalFooter>
+            <Link
+              href={{
+                pathname: path.join("/rider", "search"),
+                query: {
+                  pickupLocation: pickupLocation,
+                  dropoffLocation: dropoffLocation,
+                  date: date,
+                  time: time,
+                },
+              }}
+            >
+              <Button mr={3} onClick={onClose} width={"100%"} margin={0}>
+                Confirm
+              </Button>
+            </Link>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
