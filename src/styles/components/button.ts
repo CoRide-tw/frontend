@@ -10,5 +10,9 @@ export const ButtonStyle: ComponentStyleConfig = {
         bg: "blackAlpha.800",
       },
     },
+    login: {
+      bg: "white",
+      color: "black",
+    },
   },
 };

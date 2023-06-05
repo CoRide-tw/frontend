@@ -1,18 +1,17 @@
 import {
-  Box,
   Button,
   Text,
   Center,
-  Link,
   Icon,
   chakra,
   shouldForwardProp,
-  AspectRatio,
   Flex,
+  Box,
 } from "@chakra-ui/react";
 import { isValidMotionProp, motion } from "framer-motion";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import { AiOutlineGoogle } from "react-icons/ai";
 
@@ -23,58 +22,63 @@ const ChakraBox = chakra(motion.div, {
   shouldForwardProp: (prop) =>
     isValidMotionProp(prop) || shouldForwardProp(prop),
 });
+
 export default function LoginPage({ url }: Props) {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    router.push(url);
+  };
   return (
-    <Center
+    <Box
       height="100vh"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column"
-      bgGradient={"linear(to-b,#8E2DE2 0%,#4A00E0 30%,#4A00E0 50%,#FFFFFF 51%)"}
+      bgGradient={
+        "linear(to-b,#8E2DE2 0%, #7929E1 20%, #6634DE 40%, #543FDA 60%, #424AD7 70%, #FFFFFF 70%)"
+      }
     >
-      <ChakraBox
-        fontSize="5xl"
-        fontWeight={700}
-        color={"white"}
-        animate={{
-          scale: [1, 1.2, 1.2, 1],
-        }}
-        // @ts-ignore no problem in operation, although type error appears.
-        transition={{
-          duration: 3,
-          ease: "easeInOut",
-          repeatType: "loop",
-        }}
-      >
-        CoRide
-      </ChakraBox>
-      <Flex
-        justify={"center"}
-        width="full"
-        bgGradient={"linear(to-b, #4A00E0 70%, #FFFFFF 71%)"}
-      >
-        <Image src={"/login.png"} width={"400"} height={"270"} alt={""} />
-      </Flex>
-      <Flex direction={"column"} justify={"center"} textAlign={"center"}>
-        <Text width={"70%"} margin={"0 auto  10px"} fontSize={"xl"}>
-          Getting start with your trips and share your ride with others.
-        </Text>
-        <Link href={url} width={"full"} padding={"0px 20px"}>
-          <Button w="100%" mb={4}>
-            <Center width="60%">
-              <Center w="30px" margin="10px">
+      <Flex direction={"column"} align={"center"} justify="end" height="50%">
+        <ChakraBox
+          fontSize="5xl"
+          fontWeight={700}
+          color={"white"}
+          animate={{
+            scale: [1, 1.2, 1.2, 1],
+          }}
+          transition={{
+            duration: "3",
+            ease: "easeInOut",
+            repeatType: "loop",
+          }}
+        >
+          CoRide
+        </ChakraBox>
+        <Box w="100%" paddingInline={"20px"} marginTop="50px">
+          <Button mb={4} onClick={handleLogin} variant="login" w="100%">
+            <Center>
+              <Center w="30px">
                 <Icon as={AiOutlineGoogle} boxSize={5} />
               </Center>
-              <Text display={"flex"} marginLeft="10px" w="200px">
-                Login with Google
-              </Text>
+              <Text marginLeft="10px">Login with Google</Text>
             </Center>
           </Button>
-        </Link>
+        </Box>
       </Flex>
-    </Center>
+
+      <Box>
+        <Flex justify={"center"} width="full">
+          <Image src={"/login.png"} width={"400"} height={"270"} alt={""} />
+        </Flex>
+      </Box>
+
+      <Flex direction={"column"} justify={"center"} textAlign={"center"}>
+        <Text width={"80%"} margin={"0 auto  10px"} fontSize={"xl"}>
+          Share your ride with colleagues and friends now !
+        </Text>
+      </Flex>
+    </Box>
   );
 }
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_CORIDE_API_URL}/oauthUrl`
