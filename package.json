@@ -24,7 +24,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
-    "typescript": "5.0.3"
+    "swr": "^2.1.5",
+    "typescript": "5.0.3",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "@types/google.maps": "^3.53.1"
