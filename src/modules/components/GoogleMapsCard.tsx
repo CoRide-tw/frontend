@@ -30,15 +30,12 @@ export default function GoogleMapsCard({
 
   const directionsCallback = (response: any) => {
     if (!response) {
-      console.log("response error: ");
       return;
     }
 
     if (response.status === "OK") {
       setRenderData(response);
       onceRef.current = true;
-    } else {
-      console.log("response error: ", response);
     }
   };
 
@@ -64,16 +61,88 @@ export default function GoogleMapsCard({
           height,
           borderRadius: "8px",
         }}
-        zoom={16}
+        zoom={4}
         center={{ lat: 24.787113353364635, lng: 120.99744584351271 }}
         options={{
           draggable,
           keyboardShortcuts: false,
+          gestureHandling: "none",
           mapTypeControl: false,
           clickableIcons: false,
           fullscreenControl: false,
           streetViewControl: false,
           zoomControl: false,
+          styles: [
+            {
+              featureType: "transit",
+              elementType: "labels.icon",
+              stylers: [{ visibility: "off" }],
+            },
+
+            {
+              featureType: "transit.line",
+              elementType: "geometry",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "water",
+              elementType: "geometry.fill",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "landscape.man_made",
+              elementType: "geometry.fill",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "landscape.natural",
+              elementType: "geometry.fill",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "landscape.natural.landcover",
+              elementType: "geometry.fill",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "landscape.natural.landcover ",
+              elementType: "geometry.stroke",
+              stylers: [{ color: "#828282" }],
+            },
+            {
+              featureType: "poi",
+              elementType: "labels.text",
+              stylers: [{ visibility: "off" }],
+            },
+
+            {
+              featureType: "poi",
+              elementType: "labels.icon",
+              stylers: [{ visibility: "off" }],
+            },
+
+            {
+              featureType: "administrative",
+              elementType: "labels.text",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "administrative",
+              elementType: "geometry.fill",
+              stylers: [{ visibility: "off" }],
+            },
+
+            {
+              featureType: "road.highway",
+              elementType: "labels.icon",
+              stylers: [{ visibility: "off" }],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "geometry.stroke",
+              stylers: [{ visibility: "off" }],
+            },
+          ],
         }}
       >
         {!onceRef.current && data && (
