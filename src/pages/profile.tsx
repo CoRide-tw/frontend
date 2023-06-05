@@ -1,4 +1,3 @@
-import DriveCards from "@/modules/profile/components/HistoryTripCard";
 import NestedLayout from "@/modules/layouts/Nested";
 import HistoryPosts from "@/modules/profile/components/HistoryPosts";
 import PersonalDetails from "@/modules/profile/components/PersonalDetails";
