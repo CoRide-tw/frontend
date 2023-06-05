@@ -15,6 +15,7 @@ export default function HistoryTripCard({ info }: { info: any }) {
           objectFit={"cover"}
           height={"100%"}
           src={info.type === "DRIVING" ? "vehicle.png" : "passenger.png"}
+          alt={""}
         />
       </Box>
       <Flex direction={"column"} flex={1} padding={"4px 0px"}>
