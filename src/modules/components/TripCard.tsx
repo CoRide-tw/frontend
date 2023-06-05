@@ -1,10 +1,11 @@
-import { Avatar, AvatarGroup, Box, Flex, Icon } from "@chakra-ui/react";
+import { Avatar, AvatarGroup, Box, Flex, Icon, Spacer } from "@chakra-ui/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+import { Progress, HStack, Heading, Text } from "@chakra-ui/react";
 import { PropsWithoutRef } from "react";
 
-import { BiCurrentLocation } from "react-icons/bi";
-import { HiLocationMarker } from "react-icons/hi";
-import { IoCarSportSharp } from "react-icons/io5";
 import { BsStarFill } from "react-icons/bs";
+import { BsFillCarFrontFill } from "react-icons/bs";
+import { FaLocationArrow, FaMapMarkerAlt } from "react-icons/fa";
 
 import type { User, UserRating } from "../types/user";
 import type { CarPlate, Money, Trip, TripPoint } from "../types/trip";
@@ -17,28 +18,37 @@ const UserBadge = ({
   user: User;
   rating?: UserRating;
 }) => (
-  <Flex alignItems="center" gap="5" {...props}>
-    <Avatar src={user.avatarSrc?.href} name={user.name} size="md" />
-    <Flex direction="column" justifyContent="center">
-      <Box fontWeight="600" lineHeight="16px">
-        {user.name}
-      </Box>
+  <Flex alignItems="center" gap="4" {...props}>
+    <Avatar name={user.name} src={user.avatarSrc?.href} />
+    <Box>
+      <Heading size="sm">{user.name}</Heading>
       {rating ? (
-        <Flex alignItems="center" gap="1">
-          <Icon as={BsStarFill} w="4" h="4" />
-          <Box lineHeight="16px">{rating}</Box>
-        </Flex>
+        <HStack>
+          <Progress
+            minW="65px"
+            value={rating ? (rating / 5) * 100 : 0}
+            colorScheme="green"
+            my="1"
+            bgColor="gray.300"
+            borderRadius="10"
+          />
+          <Text fontSize="xs" fontWeight="700">
+            {rating}/5
+          </Text>
+        </HStack>
       ) : (
         <></>
       )}
-    </Flex>
+    </Box>
   </Flex>
 );
 
 const Tip = ({ tip }: { tip: Money }) => (
-  <Flex>
-    tip {tip.amount} {tip.currency}
-  </Flex>
+  <HStack spacing="1.5">
+    <Text fontSize="sm">Tip</Text>
+    <Text fontWeight="700">{tip.amount}</Text>
+    <Text fontSize="sm">{tip.currency}</Text>
+  </HStack>
 );
 
 const DateRow = ({
@@ -59,9 +69,9 @@ const DateRow = ({
   const dateString = dateLocale.format(date);
 
   return (
-    <Box mt="3" fontWeight="600">
+    <Text py="1" fontWeight="800">
       {dateString}
-    </Box>
+    </Text>
   );
 };
 
@@ -79,6 +89,7 @@ const TripPointsRows = ({
     Intl.DateTimeFormat([], {
       hour: "2-digit",
       minute: "2-digit",
+      hour12: false,
     });
 
   const startTimeString = timeLocale.format(start.time);
@@ -86,16 +97,20 @@ const TripPointsRows = ({
 
   return (
     <>
-      <Flex mt="4" gap="1">
-        <Icon as={BiCurrentLocation} w="6" h="6" />
-        {startTimeString}
-        <Box pl="2">{start.location}</Box>
-      </Flex>
-      <Flex mt="2" gap="1">
-        <Icon as={HiLocationMarker} w="6" h="6" color="red" />
-        {endTimeString}
-        <Box pl="2">{end.location}</Box>
-      </Flex>
+      <HStack>
+        <FaLocationArrow />
+        <Text p="1" fontWeight="600">
+          {startTimeString}
+        </Text>
+        <Text p="1"> {start.location} </Text>
+      </HStack>
+      <HStack>
+        <FaMapMarkerAlt color="red" />
+        <Text p="1" fontWeight="600">
+          {endTimeString}
+        </Text>
+        <Text p="1"> {end.location} </Text>
+      </HStack>
     </>
   );
 };
@@ -105,8 +120,9 @@ const CarPlateCol = ({ carPlate }: { carPlate?: CarPlate }) => {
 
   return (
     <>
-      <Icon as={IoCarSportSharp} w="6" h="6" />
-      {carPlate}
+      <BsFillCarFrontFill />
+      <Text p="1">Tesla Model X</Text>
+      <Text p="1">{carPlate}</Text>
     </>
   );
 };
@@ -131,25 +147,28 @@ export default function TripCard({
   customDateLocale?: Intl.DateTimeFormat;
 }>) {
   return (
-    <Box borderRadius="10px" bgColor="#EEE" p="16px">
-      <Flex justifyContent="space-between" alignItems="center">
-        <UserBadge user={trip.user} rating={trip.userRating} />
-        <Tip tip={trip.tip} />
-      </Flex>
-      <DateRow date={trip.date} customDateLocale={customDateLocale} />
-      <TripPointsRows
-        start={trip.start}
-        end={trip.end}
-        customTimeLocale={customTimeLocale}
-      />
-      <Flex
-        display={trip.carPlate || trip.attachedUsers ? "flex" : "none"}
-        mt="2"
-        gap="1"
-      >
-        <CarPlateCol carPlate={trip.carPlate} />
-        <AttachedUserCol attachedUsers={trip.attachedUsers} />
-      </Flex>
-    </Box>
+    <Card bgColor="#EEEEEE" m="3" borderRadius="xl">
+      <CardHeader bgGradient="linear(#EEEEEE, #E1E1E1)" borderTopRadius="xl">
+        <Flex>
+          <UserBadge user={trip.user} rating={trip.userRating} />
+          <Spacer />
+          <Tip tip={trip.tip} />
+        </Flex>
+      </CardHeader>
+      <CardBody py="2">
+        <DateRow date={trip.date} customDateLocale={customDateLocale} />
+        <TripPointsRows
+          start={trip.start}
+          end={trip.end}
+          customTimeLocale={customTimeLocale}
+        />
+      </CardBody>
+      <CardFooter py="2">
+        <HStack>
+          <CarPlateCol carPlate={trip.carPlate} />
+          <AttachedUserCol attachedUsers={trip.attachedUsers} />
+        </HStack>
+      </CardFooter>
+    </Card>
   );
 }
