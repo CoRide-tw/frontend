@@ -1,4 +1,5 @@
-import { Avatar, Flex, Center, Divider, Box, Text } from "@chakra-ui/react";
+import { Avatar, Flex, Divider, Box, Text, Icon } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { DiAptana } from "react-icons/di";
 
 const Username = "Eric Chen";
@@ -6,6 +7,10 @@ const Jobname = "Senior Software Engineer";
 const Location = "Hsinchu";
 
 export default function PersonalDetails() {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/settings");
+  };
   return (
     <Flex bg="#EEEEEE" direction="column" justify="center" align="center">
       <Avatar
@@ -18,7 +23,8 @@ export default function PersonalDetails() {
         <Text fontWeight={"600"} fontSize={"3xl"}>
           {Username}
         </Text>
-        <DiAptana />
+
+        <Icon as={DiAptana} w={5} h={5} onClick={handleClick} />
       </Flex>
       <Text fontWeight={"600"} fontSize={"lg"} color={"gray.500"}>
         {Jobname}
