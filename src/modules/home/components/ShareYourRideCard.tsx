@@ -9,7 +9,7 @@ export default function ShareYourRideCard() {
         <Flex
           w="100%"
           height="30%"
-          bg="#EEEEEE"
+          bgGradient={"linear(to-r, #8E2DE2 30%, #4A00E0 100%)"}
           borderRadius="10px"
           border="1px "
           borderColor="#EEEEEE"
@@ -20,8 +20,15 @@ export default function ShareYourRideCard() {
             justifyContent="center"
             margin="20px"
           >
-            <Text fontWeight={700}>Become a driver and pick up passengers</Text>
-            <Button marginTop="10px" height="min-content" borderRadius="20px">
+            <Text fontWeight={700} color={"whiteAlpha.800"}>
+              Become a driver and pick up passengers
+            </Text>
+            <Button
+              marginTop="10px"
+              height="min-content"
+              borderRadius="20px"
+              variant={"white"}
+            >
               Share a ride
               <Icon as={AiOutlineArrowRight} margin="5px" />
             </Button>
