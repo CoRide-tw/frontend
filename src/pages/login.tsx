@@ -8,6 +8,7 @@ import {
   chakra,
   shouldForwardProp,
   AspectRatio,
+  Flex,
 } from "@chakra-ui/react";
 import { isValidMotionProp, motion } from "framer-motion";
 import { GetServerSideProps } from "next";
@@ -29,12 +30,12 @@ export default function LoginPage({ url }: Props) {
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
+      bgGradient={"linear(to-b,#8E2DE2 0%,#4A00E0 30%,#4A00E0 50%,#FFFFFF 51%)"}
     >
       <ChakraBox
         fontSize="5xl"
         fontWeight={700}
-        mb={8}
-        color={"black"}
+        color={"white"}
         animate={{
           scale: [1, 1.2, 1.2, 1],
         }}
@@ -47,21 +48,30 @@ export default function LoginPage({ url }: Props) {
       >
         CoRide
       </ChakraBox>
-
-      <Image src={"/login.png"} alt={""} width={"400"} height={"270"} />
-
-      <Link href={url} width={"full"} padding={"0px 20px"}>
-        <Button w="100%" border="1px" borderColor={"gray.500"} mb={4}>
-          <Center width="60%">
-            <Center w="30px" margin="10px">
-              <Icon as={AiOutlineGoogle} boxSize={5} />
+      <Flex
+        justify={"center"}
+        width="full"
+        bgGradient={"linear(to-b, #4A00E0 70%, #FFFFFF 71%)"}
+      >
+        <Image src={"/login.png"} width={"400"} height={"270"} alt={""} />
+      </Flex>
+      <Flex direction={"column"} justify={"center"} textAlign={"center"}>
+        <Text width={"70%"} margin={"0 auto  10px"} fontSize={"xl"}>
+          Getting start with your trips and share your ride with others.
+        </Text>
+        <Link href={url} width={"full"} padding={"0px 20px"}>
+          <Button w="100%" mb={4}>
+            <Center width="60%">
+              <Center w="30px" margin="10px">
+                <Icon as={AiOutlineGoogle} boxSize={5} />
+              </Center>
+              <Text display={"flex"} marginLeft="10px" w="200px">
+                Login with Google
+              </Text>
             </Center>
-            <Text display={"flex"} marginLeft="10px" w="200px">
-              Login with Google
-            </Text>
-          </Center>
-        </Button>
-      </Link>
+          </Button>
+        </Link>
+      </Flex>
     </Center>
   );
 }
@@ -70,7 +80,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `${process.env.NEXT_PUBLIC_CORIDE_API_URL}/oauthUrl`
   );
   const { url } = await data.json();
-  console.log(url);
   return {
     props: {
       url,
