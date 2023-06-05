@@ -1,4 +1,4 @@
-import TopLayout from "@/modules/layouts/Top";
+import HomeLayout from "@/modules/layouts/Home";
 import RiderSearchInput from "@/modules/components/RiderSearchInput";
 import ShareYourRideCard from "@/modules/home/components/ShareYourRideCard";
 import YourTripsSection from "@/modules/home/components/YourTripsSection";
@@ -10,11 +10,11 @@ export default function HomePage() {
       <Head>
         <title>Home - CoRide</title>
       </Head>
-      <TopLayout>
+      <HomeLayout>
         <RiderSearchInput />
         <ShareYourRideCard />
         <YourTripsSection />
-      </TopLayout>
+      </HomeLayout>
     </>
   );
 }
