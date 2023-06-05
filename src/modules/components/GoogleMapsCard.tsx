@@ -104,11 +104,7 @@ export default function GoogleMapsCard({
               elementType: "geometry.fill",
               stylers: [{ visibility: "off" }],
             },
-            {
-              featureType: "landscape.natural.landcover ",
-              elementType: "geometry.stroke",
-              stylers: [{ color: "#828282" }],
-            },
+
             {
               featureType: "poi",
               elementType: "labels.text",
