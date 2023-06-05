@@ -18,6 +18,5 @@ export const useUser = () => {
     user: data,
     error,
     isLoading,
-    mutate,
   };
 };
