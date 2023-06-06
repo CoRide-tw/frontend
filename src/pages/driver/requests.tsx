@@ -49,7 +49,11 @@ const RequestCards = ({ routeId }: { routeId: string }) => {
       </Center>
     );
 
-  const cards = requests.map((request: Request, index) => (
+  const pendingRequests = requests.filter(
+    (request) => request.status === "pending"
+  );
+
+  const cards = pendingRequests.map((request: Request, index) => (
     <Link key={index} href={`/driver/request/${request.id}`}>
       <Card request={request} />
     </Link>
