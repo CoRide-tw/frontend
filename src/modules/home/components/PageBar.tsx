@@ -12,12 +12,12 @@ export default function PageBar() {
       <Flex
         w={"full"}
         borderRadius={"10px"}
-        border={"1px"}
-        borderColor={"#4A00E0 "}
+        bg={"gray.200"}
         height={"50px"}
         onClick={() => {
           router.push("/profile");
         }}
+        gap={4}
       >
         <Flex width={"50px"} justify={"center"} align={"center"}>
           <Flex
@@ -25,7 +25,6 @@ export default function PageBar() {
             height={"35px"}
             borderRadius={"50%"}
             bg="white"
-            border={"1px"}
             justify={"center"}
             align={"center"}
           >
@@ -39,9 +38,9 @@ export default function PageBar() {
       <Flex
         w={"full"}
         borderRadius={"10px"}
-        border={"1px "}
-        borderColor={"#4A00E0 "}
+        bg={"gray.200"}
         height={"50px"}
+        gap={4}
         onClick={() => {
           router.push("/settings");
         }}
@@ -51,7 +50,6 @@ export default function PageBar() {
             width={"35px"}
             height={"35px"}
             borderRadius={"50%"}
-            border={"1px"}
             bg="white"
             justify={"center"}
             align={"center"}
