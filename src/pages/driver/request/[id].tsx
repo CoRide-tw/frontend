@@ -191,7 +191,7 @@ function DriverRequestDetailPage({ router }: { router: NextRouter }) {
   };
 
   const tip: Money = {
-    amount: 40,
+    amount: request.tips,
     currency: "NT",
   };
 

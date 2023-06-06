@@ -24,7 +24,7 @@ const Card = ({ request }: PropsWithoutRef<{ request: Request }>) => {
 
   const trip: Trip = {
     user: mockUser,
-    tip: { amount: 65, currency: "NTD" },
+    tip: { amount: request.tips, currency: "NTD" },
     date: new Date(request.pickupStartTime),
     start: {
       location: `${request.pickupLong}, ${request.pickupLat}`,
