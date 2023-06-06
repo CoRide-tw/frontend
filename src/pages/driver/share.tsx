@@ -85,12 +85,12 @@ const SubmitShareForm = async (event: FormEvent<HTMLFormElement>) => {
 
   const form = event.currentTarget;
 
-  const { lat: pickupLat, lng: pickupLong } = await addressToGeoLocation(
+  const { lat: startLat, lng: startLong } = await addressToGeoLocation(
     form.startingPoint.value,
     coRideToken ?? ""
   );
 
-  const { lat: dropoffLat, lng: dropoffLong } = await addressToGeoLocation(
+  const { lat: endLat, lng: endLong } = await addressToGeoLocation(
     form.destination.value,
     coRideToken ?? ""
   );
@@ -102,11 +102,14 @@ const SubmitShareForm = async (event: FormEvent<HTMLFormElement>) => {
     ).toISOString(),
     endTime: new Date(`${form.date.value} ${form.timeEnd.value}`).toISOString(),
     capacity: Number(form.passengerNumber.value),
-    pickupLat,
-    pickupLong,
-    dropoffLat,
-    dropoffLong,
+    startLat,
+    startLong,
+    endLat,
+    endLong,
   };
+
+  console.log(body);
+  console.log("json string", JSON.stringify(body));
 
   const data = await authFetcher("/route", {
     method: "POST",
