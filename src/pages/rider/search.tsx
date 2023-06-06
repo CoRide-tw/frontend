@@ -1,4 +1,4 @@
-import RiderSearchInput from "@/modules/components/RiderSearchInput";
+import RiderSearchInput from "@/modules/components/RiderSearchBar";
 import NestedLayout from "@/modules/layouts/Nested";
 
 export default function Search() {
