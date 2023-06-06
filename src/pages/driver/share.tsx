@@ -11,7 +11,7 @@ const FormGroupTitle = ({ children }: PropsWithChildren) => (
 const TripPointsForm = ({ form }: { form: string }) => (
   <Flex gap="16px" direction="column">
     <FormGroupTitle>Your Trip</FormGroupTitle>
-    <Input form={form} name="starting-point" placeholder="Starting point" />
+    <Input form={form} name="startingPoint" placeholder="Starting point" />
     <Input form={form} name="destination" placeholder="Destination" />
   </Flex>
 );
@@ -46,14 +46,14 @@ const WaitIntervalForm = ({ form }: { form: string }) => {
         <Input
           form={form}
           type="time"
-          name="time-start"
+          name="timeStart"
           defaultValue={currentTimeInputString}
         />
         <Flex align="center">~</Flex>
         <Input
           form={form}
           type="time"
-          name="time-end"
+          name="timeEnd"
           defaultValue={anHourLaterTimeInputString}
         />
       </Flex>
@@ -67,7 +67,7 @@ const CoRideInfoForm = ({ form }: { form: string }) => (
     <Input
       form={form}
       type="number"
-      name="passenger-number"
+      name="passengerNumber"
       placeholder="Passenger number"
     />
     <Textarea form={form} name="remark" placeholder="Remark" resize="none" />
