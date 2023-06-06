@@ -9,43 +9,49 @@ export default function PageBar() {
 
   return (
     <Flex margin={"5px 20px"} gap={3}>
-      <Flex w={"full"} borderRadius={"10px"} bg={"#8E2DE2 "} height={"50px"}>
-        <Flex
-          width={"50px"}
-          justify={"center"}
-          align={"center"}
-          onClick={() => {
-            router.push("/profile");
-          }}
-        >
+      <Flex
+        w={"full"}
+        borderRadius={"10px"}
+        border={"1px"}
+        borderColor={"#4A00E0 "}
+        height={"50px"}
+        onClick={() => {
+          router.push("/profile");
+        }}
+      >
+        <Flex width={"50px"} justify={"center"} align={"center"}>
           <Flex
             width={"35px"}
             height={"35px"}
             borderRadius={"50%"}
             bg="white"
+            border={"1px"}
             justify={"center"}
             align={"center"}
           >
             <Icon as={ImProfile} width={"20px"} height={"20px"} />
           </Flex>
         </Flex>
-        <Center color={"white"} fontWeight={"700"}>
+        <Center color={"black"} fontWeight={"700"}>
           Profile
         </Center>
       </Flex>
-      <Flex w={"full"} borderRadius={"10px"} bg={"#4A00E0 "} height={"50px"}>
-        <Flex
-          width={"50px"}
-          justify={"center"}
-          align={"center"}
-          onClick={() => {
-            router.push("/settings");
-          }}
-        >
+      <Flex
+        w={"full"}
+        borderRadius={"10px"}
+        border={"1px "}
+        borderColor={"#4A00E0 "}
+        height={"50px"}
+        onClick={() => {
+          router.push("/settings");
+        }}
+      >
+        <Flex width={"50px"} justify={"center"} align={"center"}>
           <Flex
             width={"35px"}
             height={"35px"}
             borderRadius={"50%"}
+            border={"1px"}
             bg="white"
             justify={"center"}
             align={"center"}
@@ -53,7 +59,7 @@ export default function PageBar() {
             <Icon as={DiAptana} width={"20px"} height={"20px"} />
           </Flex>
         </Flex>
-        <Center color={"white"} fontWeight={"700"}>
+        <Center color={"black"} fontWeight={"700"}>
           Settings
         </Center>
       </Flex>

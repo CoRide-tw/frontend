@@ -24,7 +24,7 @@ export default function GreetingSection() {
         <InputLeftElement>
           <SearchIcon color={"gray.400"} />
         </InputLeftElement>
-        <Input placeholder="Where to?" />
+        <Input placeholder="Where to?" isReadOnly />
       </InputGroup>
     </Flex>
   );
