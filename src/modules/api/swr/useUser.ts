@@ -10,7 +10,7 @@ export const useUser = () => {
 
   // get user
   const { data, error, isLoading } = useSWR(
-    shouldFetch ? `/user/${Number(userId)}` : null,
+    () => shouldFetch ? `/user/${Number(userId)}` : null,
     authFetcher
   );
 
