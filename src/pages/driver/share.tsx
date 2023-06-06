@@ -1,6 +1,11 @@
+import { authFetcher } from "@/modules/api/fetcher";
 import NestedLayout from "@/modules/layouts/Nested";
+import { addressToGeoLocation } from "@/utils/address";
+import { getClientCookies } from "@/utils/cookies";
+import { toISOStringWithTimezone } from "@/utils/time";
 import { Box, Button, Flex, Input, Textarea } from "@chakra-ui/react";
-import { PropsWithChildren } from "react";
+import { useRouter } from "next/router";
+import { FormEvent, PropsWithChildren } from "react";
 
 const FormGroupTitle = ({ children }: PropsWithChildren) => (
   <Box fontSize="18px" fontWeight="500">
@@ -74,10 +79,62 @@ const CoRideInfoForm = ({ form }: { form: string }) => (
   </Flex>
 );
 
+const SubmitShareForm = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+
+  const { userId, coRideToken } = getClientCookies();
+
+  const form = event.currentTarget;
+
+  const { lat: pickupLat, lng: pickupLong } = await addressToGeoLocation(
+    form.startingPoint.value,
+    coRideToken ?? ""
+  );
+
+  const { lat: dropoffLat, lng: dropoffLong } = await addressToGeoLocation(
+    form.destination.value,
+    coRideToken ?? ""
+  );
+
+  const body = {
+    driverId: Number(userId),
+    startTime: new Date(
+      `${form.date.value} ${form.timeStart.value}`
+    ).toISOString(),
+    endTime: new Date(`${form.date.value} ${form.timeEnd.value}`).toISOString(),
+    capacity: Number(form.passengerNumber.value),
+    pickupLat,
+    pickupLong,
+    dropoffLat,
+    dropoffLong,
+  };
+
+  const data = await authFetcher("/route", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${coRideToken}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  return data.id;
+};
+
 export default function ShareRide() {
+  const router = useRouter();
+
   return (
     <NestedLayout title="Share Your Ride">
-      <form method="post" action="/api/trip/share" id="trip-share-form">
+      <form
+        // method="post"
+        // action="/api/trip/share"
+        id="trip-share-form"
+        onSubmit={(e) => {
+          SubmitShareForm(e).then((id) =>
+            router.push(`/driver/requests?new=1&routeId=${id}`)
+          );
+        }}
+      >
         <Flex direction="column" gap="16px" mx="36px">
           <TripPointsForm form="trip-share-form" />
           <WaitIntervalForm form="trip-share-form" />
