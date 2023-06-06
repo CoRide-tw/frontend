@@ -2,9 +2,10 @@ import { Box, Button, Text, Flex, Icon } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineArrowRight } from "react-icons/ai";
+
 export default function ShareYourRideCard() {
   return (
-    <Box margin="20px">
+    <Box margin="10px 20px">
       <Link href="/driver/share">
         <Flex
           w="100%"
