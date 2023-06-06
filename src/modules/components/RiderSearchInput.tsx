@@ -183,7 +183,7 @@ export default function RiderSearchInput() {
           defaultValue={timeValues}
         />
       </Center>
-      <Button w="100%" bg="black" color="white" onClick={handleSearch}>
+      <Button w="100%" onClick={handleSearch}>
         Search
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
