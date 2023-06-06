@@ -103,38 +103,44 @@ const Tip = ({ tip }: { tip: Money }) => (
   </Flex>
 );
 
-const acceptRequest = async ({ request }: { request: Request }) => {
-  const { userId } = getClientCookies();
-
-  try {
-    await authFetcher("/trip", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        riderId: request.riderId,
-        driverId: userId,
-        requestId: request.id,
-        routeId: request.routeId,
-      }),
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const denyRequest = async ({ request }: { request: Request }) => {
-  try {
-    await authFetcher(`/request/${request.id}/status`, {
-      method: "PATCH",
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const ActionRow = ({ request }: { request: Request }) => {
+  const router = useRouter();
+
+  const acceptRequest = async ({ request }: { request: Request }) => {
+    const { userId } = getClientCookies();
+
+    try {
+      await authFetcher("/trip", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          riderId: request.riderId,
+          driverId: Number(userId),
+          requestId: request.id,
+          routeId: request.routeId,
+        }),
+      });
+
+      router.back();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const denyRequest = async ({ request }: { request: Request }) => {
+    try {
+      await authFetcher(`/request/${request.id}/status`, {
+        method: "PATCH",
+      });
+
+      router.back();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Flex gap="5" mt="7">
       <IconButton
