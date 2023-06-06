@@ -19,7 +19,7 @@ const UserBadge = ({
   rating?: UserRating;
 }) => (
   <Flex alignItems="center" gap="4" {...props}>
-    <Avatar name={user.name} src={user.avatarSrc?.href} />
+    <Avatar name={user.name} src={user.pictureUrl} />
     <Box>
       <Heading size="sm">{user.name}</Heading>
       {rating ? (
@@ -131,7 +131,7 @@ const AttachedUserCol = ({ attachedUsers }: { attachedUsers?: User[] }) => {
   if (attachedUsers === undefined) return <></>;
 
   const avatars = attachedUsers.map((user, index) => (
-    <Avatar key={index} name={user.name} src={user.avatarSrc?.href} size="xs" />
+    <Avatar key={index} name={user.name} src={user.pictureUrl} size="xs" />
   ));
 
   return <AvatarGroup pl="2">{avatars}</AvatarGroup>;
