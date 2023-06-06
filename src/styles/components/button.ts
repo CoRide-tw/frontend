@@ -29,5 +29,14 @@ export const ButtonStyle: ComponentStyleConfig = {
       bg: "white",
       color: "black",
     },
+    colorful: {
+      bgGradient: "linear(to-r, #8E2DE2 30%, #4A00E0 100%)",
+      color: "white",
+
+      _disabled: {
+        bg: "gray.500",
+        color: "white",
+      },
+    },
   },
 };
