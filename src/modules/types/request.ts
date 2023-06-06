@@ -8,6 +8,7 @@ export type RequestStatus =
   | "accepted"
   | "canceled"
   | "completed";
+export type TipAmount = number;
 
 export type Request = {
   id: RequestId;
@@ -22,4 +23,5 @@ export type Request = {
   status: RequestStatus;
   createdAt: TimeString;
   updatedAt: TimeString;
+  tips: TipAmount;
 };
