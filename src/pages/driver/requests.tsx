@@ -2,7 +2,7 @@ import { useRequests } from "@/modules/api/swr/useRequests";
 import NestedLayout from "@/modules/layouts/Nested";
 import { Box, Center, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { PropsWithoutRef, useEffect } from "react";
+import { PropsWithoutRef, useEffect, useMemo, useState } from "react";
 import { getFirstQuery } from "@/utils/getFirstQuery";
 import TripCard from "@/modules/components/TripCard";
 import { Request } from "@/modules/types/request";
@@ -61,15 +61,18 @@ const RequestCards = ({ routeId }: { routeId: string }) => {
 export default function RequestsListView() {
   const router = useRouter();
   const toast = useToast();
+  const [newQuery, setNewQuery] = useState(true);
 
   useEffect(() => {
-    if (router.query.new === "1") {
+    if (router.query.new === "1" && newQuery) {
       toast({
         title: "Share Success",
         status: "success",
         duration: 1600,
         position: "bottom",
       });
+
+      setNewQuery(false);
     }
   }, [router.query]);
 
