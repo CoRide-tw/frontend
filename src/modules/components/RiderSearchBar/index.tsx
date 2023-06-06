@@ -122,7 +122,7 @@ export default function RiderSearchBar() {
       tips: Number(tips),
     });
 
-    router.push("/rider/searchpage");
+    router.push("/rider/search/result");
   };
 
   return (
