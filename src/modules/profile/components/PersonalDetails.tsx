@@ -1,82 +1,153 @@
-import { Avatar, Flex, Divider, Box, Text, Icon } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { DiAptana } from "react-icons/di";
+import { authFetcher } from "@/modules/api/fetcher";
+import { useUser } from "@/modules/api/swr/useUser";
 
-const Username = "Eric Chen";
-const Jobname = "Senior Software Engineer";
-const Location = "Hsinchu";
+import { Avatar, Flex, Text } from "@chakra-ui/react";
+
+import useSWR from "swr";
+import HistoryTripCard from "./HistoryTripCard";
+import { useState } from "react";
 
 export default function PersonalDetails() {
-  const router = useRouter();
-  const handleClick = () => {
-    router.push("/settings");
-  };
-  return (
-    <Flex bg="#EEEEEE" direction="column" justify="center" align="center">
-      <Avatar
-        marginTop={"80px"}
-        name={Username}
-        size="2xl"
-        src="https://bit.ly/kent-c-dodds"
-      />
-      <Flex justifyContent={"center"} alignItems={"center"}>
-        <Text fontWeight={"600"} fontSize={"3xl"}>
-          {Username}
-        </Text>
+  const { user } = useUser();
+  const [isJoin, setIsJoin] = useState(true);
 
-        <Icon as={DiAptana} w={5} h={5} onClick={handleClick} />
+  const shouldFetch = !!Number(user?.id);
+  const { data, error, isLoading } = useSWR(
+    () => (shouldFetch ? `/trip?userId=${Number(user.id)}` : null),
+    authFetcher
+  );
+  const PreviousTripData = {
+    driver: [
+      {
+        id: 5,
+        riderId: 34,
+        driverId: 34,
+        requestId: 4,
+        routeId: 9,
+        destination: "Kathmandu",
+        time: "2023-06-06T15:08:09.743606Z",
+        fee: 100,
+        createdAt: "2023-06-06T15:08:09.743606Z",
+      },
+      {
+        id: 6,
+        riderId: 34,
+        driverId: 34,
+        requestId: 5,
+        routeId: 10,
+        destination: "Kathmandu",
+        time: "2023-06-06T15:08:09.743606Z",
+        fee: 100,
+
+        createdAt: "2023-06-06T15:08:16.326172Z",
+      },
+      {
+        id: 7,
+        riderId: 34,
+        driverId: 34,
+        requestId: 6,
+        routeId: 11,
+        destination: "Kathmandu",
+        time: "2023-06-06T15:08:09.743606Z",
+        fee: 100,
+        createdAt: "2023-06-06T15:08:20.625445Z",
+      },
+    ],
+    rider: [
+      {
+        id: 5,
+        riderId: 34,
+        driverId: 34,
+        requestId: 4,
+        routeId: 9,
+        destination: "fgfg",
+        time: "2023-06-06T15:08:09.743606Z",
+        fee: 100,
+        createdAt: "2023-06-06T15:08:09.743606Z",
+      },
+      {
+        id: 6,
+        riderId: 34,
+        driverId: 34,
+        requestId: 5,
+        routeId: 10,
+        destination: "fgfg",
+        time: "2023-06-06T15:08:09.743606Z",
+        fee: 100,
+        createdAt: "2023-06-06T15:08:16.326172Z",
+      },
+      {
+        id: 7,
+        riderId: 34,
+        driverId: 34,
+        requestId: 6,
+        routeId: 11,
+        destination: "fgfg",
+        time: "2023-06-06T15:08:09.743606Z",
+        fee: 100,
+
+        createdAt: "2023-06-06T15:08:20.625445Z",
+      },
+    ],
+  };
+
+  let tripData = isJoin ? PreviousTripData?.rider : PreviousTripData?.driver;
+  return (
+    <Flex direction="column" padding={"20px 20px"}>
+      <Flex gap={4}>
+        <Avatar name={user?.name} size="lg" src={user?.pictureUrl} />
+        <Flex direction={"column"} justify={"center"} align={"center"}>
+          <Text fontWeight={"600"} fontSize={"2xl"}>
+            {user?.name}
+          </Text>
+        </Flex>
       </Flex>
-      <Text fontWeight={"600"} fontSize={"lg"} color={"gray.500"}>
-        {Jobname}
-      </Text>
-      <Text fontWeight={"600"} fontSize={"lg"} color={"gray.500"}>
-        {Location}
-      </Text>
+
       <Flex
         width="100%"
         justify={"center"}
         align={"center"}
-        bgGradient="linear(to-b, #EEEEEE 0%, #EEEEEE 50%,white 51%,white 100%)"
-        padding={"20px"}
+        padding={"10px"}
+        margin={"20px 0px"}
+        bg={"#EEEEEE"}
+        borderRadius={"30px"}
+        gap={4}
       >
         <Flex
+          width={"full"}
           justify={"center"}
           align={"center"}
-          bg={"white"}
-          h="80px"
-          width="350px"
-          borderRadius="10px"
-          boxShadow=" 0px 4px 4px rgba(0, 0, 0, 0.25)"
+          gap={2}
+          bg={isJoin ? "gray.600" : "white"}
+          color={isJoin ? "white" : "gray.600"}
+          padding={"10px"}
+          borderRadius={"20px"}
+          onClick={() => setIsJoin(true)}
         >
-          <Flex
-            direction="column"
-            justify={"center"}
-            align={"center"}
-            width="60px"
-            margin="auto"
-          >
-            <Text fontWeight="600">25</Text>
-            <Text fontWeight="600" color="gray.400">
-              Joins
-            </Text>
-          </Flex>
-          <Box height="60px" width="5px" margin="auto 10px">
-            <Divider orientation="vertical" color="gray.900" size="2xl" />
-          </Box>
-          <Flex
-            direction="column"
-            justify={"center"}
-            align={"center"}
-            width="60px"
-            margin="auto"
-          >
-            <Text fontWeight="600">56</Text>
-            <Text fontWeight="600" color="gray.400">
-              Drives
-            </Text>
-          </Flex>
+          <Text fontWeight="600">{!!data?.rider ? data?.rider.length : 0}</Text>
+          <Text fontWeight="600">Rides</Text>
+        </Flex>
+
+        <Flex
+          width={"full"}
+          justify={"center"}
+          align={"center"}
+          gap={2}
+          color={isJoin ? "gray.600" : "white"}
+          bg={isJoin ? "white" : "gray.600"}
+          padding={"10px"}
+          borderRadius={"20px"}
+          onClick={() => setIsJoin(false)}
+        >
+          <Text fontWeight="600">
+            {!!data?.driver ? data?.driver.length : 0}
+          </Text>
+          <Text fontWeight="600">Drives</Text>
         </Flex>
       </Flex>
+      {tripData.map((item, index) => (
+        <HistoryTripCard key={index} info={item} />
+      ))}
     </Flex>
   );
 }
