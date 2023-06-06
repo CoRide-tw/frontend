@@ -2,7 +2,6 @@ import { authFetcher } from "@/modules/api/fetcher";
 import NestedLayout from "@/modules/layouts/Nested";
 import { addressToGeoLocation } from "@/utils/address";
 import { getClientCookies } from "@/utils/cookies";
-import { toISOStringWithTimezone } from "@/utils/time";
 import { Box, Button, Flex, Input, Textarea } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FormEvent, PropsWithChildren } from "react";

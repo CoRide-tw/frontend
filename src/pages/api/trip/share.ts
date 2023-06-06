@@ -1,6 +1,5 @@
 import { authFetcher } from "@/modules/api/fetcher";
 import { addressToGeoLocation } from "@/utils/address";
-import { toISOStringWithTimezone } from "@/utils/time";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -22,12 +21,10 @@ export default async function handler(
 
     const body = {
       driverId: Number(userId),
-      startTime: toISOStringWithTimezone(
-        new Date(`${req.body.date} ${req.body.timeStart}`)
-      ),
-      endTime: toISOStringWithTimezone(
-        new Date(`${req.body.date} ${req.body.timeEnd}`)
-      ),
+      startTime: new Date(
+        `${req.body.date} ${req.body.timeStart}`
+      ).toISOString(),
+      endTime: new Date(`${req.body.date} ${req.body.timeEnd}`).toISOString(),
       capacity: Number(req.body.passengerNumber),
       pickupLat,
       pickupLong,
