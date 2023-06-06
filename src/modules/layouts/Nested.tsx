@@ -10,7 +10,7 @@ const TopBar = ({
   title: string;
   buttonCallback: MouseEventHandler<HTMLButtonElement>;
 }) => (
-  <Center w="full" h="80px" fontSize="22px" fontWeight="bold">
+  <Center w="full" h="60px" fontSize="22px" fontWeight="bold">
     <IconButton
       aria-label="Back"
       icon={<ChevronLeftIcon />}
@@ -22,12 +22,6 @@ const TopBar = ({
     />
     {title}
   </Center>
-);
-
-const ScrollArea = ({ children }: PropsWithChildren) => (
-  <Box flex="1" overflow="scroll">
-    {children}
-  </Box>
 );
 
 export default function NestedLayout({
@@ -42,9 +36,9 @@ export default function NestedLayout({
   const buttonCallback = backButtonCallback ?? (() => router.back());
 
   return (
-    <Flex direction="column" h="100vh" w="100vw">
+    <Flex direction="column">
       <TopBar title={title} buttonCallback={buttonCallback} />
-      <ScrollArea>{children}</ScrollArea>
+      {children}
     </Flex>
   );
 }
