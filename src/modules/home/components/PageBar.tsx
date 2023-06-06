@@ -17,6 +17,7 @@ export default function PageBar() {
         onClick={() => {
           router.push("/profile");
         }}
+        gap={4}
       >
         <Flex width={"50px"} justify={"center"} align={"center"}>
           <Flex
@@ -39,6 +40,7 @@ export default function PageBar() {
         borderRadius={"10px"}
         bg={"gray.200"}
         height={"50px"}
+        gap={4}
         onClick={() => {
           router.push("/settings");
         }}
