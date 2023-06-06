@@ -1,44 +1,23 @@
 import { Box, Flex, Text, Divider } from "@chakra-ui/react";
-import AvailableDriverCard from "@/modules/components/AvailableDriverCard";
-import TripCard from "@/modules/components/TripCard";
-import { User } from "@/modules/types/user";
-import { Trip } from "@/modules/types/trip";
-
-
-// request data
-
-const trip: Trip = {
-  user: {
-    name: "Eric Chen",
-    pictureUrl: "https://bit.ly/sage-adebayo",
-  },
-  userRating: 3.8,
-  date: new Date("2023-05-23"),
-  tip: {
-    amount: 65,
-    currency: "NTD",
-  },
-  start: {
-    location: "TSMC 5",
-    time: new Date("2023-05-23 18:30"),
-  },
-  end: {
-    location: "Home",
-    time: new Date("2023-05-23 18:55"),
-  },
-  carPlate: "XXX-1234",
-};
+import { useRouteRankings } from "@/modules/api/swr/useRouteRankings";
+import RouteCard from "./RouteCard";
 
 export default function FindAvailableSection() {
+  const { data: availableRoutes, error, isLoading } = useRouteRankings();
+  console.log("av", availableRoutes);
+
   return (
     <Box margin="20px">
-      <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
+      <Text fontSize="xl" fontWeight={"600"} marginBottom="10px">
         Best Matches
       </Text>
 
       <Divider />
-      
-      <TripCard trip={trip} />
+      <Flex direction="column" gap="8px">
+        {availableRoutes.map((data) => (
+          <RouteCard key={data.id} data={data} />
+        ))}
+      </Flex>
     </Box>
   );
 }

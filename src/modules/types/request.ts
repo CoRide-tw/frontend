@@ -1,4 +1,4 @@
-import { Latitude, Longtitude, RouteId, TimeString } from "./route";
+import { Latitude, Longitude, RouteId, TimeString } from "./route";
 import { UserId } from "./user";
 
 export type RequestId = number;
@@ -13,9 +13,9 @@ export type Request = {
   id: RequestId;
   riderId: UserId;
   routeId: RouteId;
-  pickupLong: Longtitude;
+  pickupLong: Longitude;
   pickupLat: Latitude;
-  dropoffLong: Longtitude;
+  dropoffLong: Longitude;
   dropoffLat: Latitude;
   pickupStartTime: TimeString;
   pickupEndTime: TimeString;
