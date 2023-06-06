@@ -61,8 +61,8 @@ export default function GoogleMapsCard({
           height,
           borderRadius: "8px",
         }}
-        zoom={4}
-        center={{ lat: 24.787113353364635, lng: 120.99744584351271 }}
+        zoom={16}
+        center={{ lat: 24.788210986554585, lng: 120.99751811534229 }}
         options={{
           draggable,
           keyboardShortcuts: false,

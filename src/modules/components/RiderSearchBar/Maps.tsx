@@ -7,20 +7,18 @@ interface Props {
 }
 
 export default function Maps({ origin, destination }: Props) {
-  if (!origin || !destination) return null;
+  const data =
+    origin && destination
+      ? {
+          origin,
+          waypoints: [],
+          destination,
+          travelMode:
+            "DRIVING" as DirectionsServiceProps["options"]["travelMode"],
+        }
+      : undefined;
 
   return (
-    <GoogleMapsCard
-      data={{
-        origin,
-        waypoints: [],
-        destination,
-        travelMode:
-          "DRIVING" as DirectionsServiceProps["options"]["travelMode"],
-      }}
-      draggable={true}
-      width="100%"
-      height="100%"
-    />
+    <GoogleMapsCard data={data} draggable={true} width="100%" height="100%" />
   );
 }
