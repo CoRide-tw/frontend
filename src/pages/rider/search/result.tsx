@@ -29,7 +29,10 @@ export default function SearchResultPage() {
     );
   }
   return (
-    <NestedLayout title="Request Your Ride">
+    <NestedLayout
+      title="Request Your Ride"
+      backButtonCallback={() => router.push("/rider/search")}
+    >
       <SearchInputDisplaySection />
       <FindAvailableSection />
     </NestedLayout>
