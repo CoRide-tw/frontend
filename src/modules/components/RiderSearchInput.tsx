@@ -7,7 +7,6 @@ import {
   Flex,
   Input,
   Modal,
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
@@ -20,20 +19,24 @@ import GoogleMapsCard from "./GoogleMapsCard";
 import { DirectionsServiceProps } from "@react-google-maps/api";
 import path from "path";
 import { useRouter } from "next/router";
-
+import { authFetcher } from "../api/fetcher";
+type Address = {
+  lat: number;
+  lng: number;
+  address: string;
+};
+type Data = {
+  pickup?: Address;
+  dropoff?: Address;
+  date?: string;
+  time?: string;
+  tips?: string;
+};
 export default function RiderSearchInput() {
   const toast = useToast();
-
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [dropoffLocation, setDropoffLocation] = useState("");
-  const [date, setDate] = useState<string>();
-  const [time, setTime] = useState<string>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
-  const nowTime = Date.now();
-  const now = new Date(nowTime);
+  const now = new Date(Date.now());
   const dateValues =
-    now.getFullYear().toString().padStart(2, "0") +
+    now.getFullYear().toString().padStart(4, "0") +
     "-" +
     (now.getMonth() + 1).toString().padStart(2, "0") +
     "-" +
@@ -41,9 +44,19 @@ export default function RiderSearchInput() {
   const timeValues =
     now.getHours().toString().padStart(2, "0") +
     ":" +
-    now.getMinutes().toString().padStart(2, "0");
+    (now.getMinutes() + 1).toString().padStart(2, "0");
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [dropoffLocation, setDropoffLocation] = useState("");
+  const [date, setDate] = useState(dateValues);
+  const [time, setTime] = useState(timeValues);
+  const [tips, setTips] = useState<string | undefined>();
+  const [resData, setResData] = useState<Data>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    // check if the input is valid
+
     if (pickupLocation === "" || dropoffLocation === "" || !date || !time) {
       toast({
         position: "top",
@@ -57,7 +70,7 @@ export default function RiderSearchInput() {
       return;
     }
 
-    if (new Date(date).getTime() < nowTime) {
+    if (new Date(date + time).getTime() < Date.now()) {
       toast({
         position: "top",
         title: "Search Time Error",
@@ -68,14 +81,49 @@ export default function RiderSearchInput() {
       });
       return;
     }
-    onOpen();
+    const [pickupRes, dropoffRes] = await Promise.all([
+      authFetcher(encodeURI("/google_api/geocoding?text=" + pickupLocation)),
+      authFetcher(encodeURI("/google_api/geocoding?text=" + dropoffLocation)),
+    ]);
 
-    // search api
+    if (
+      pickupRes.lat == "" ||
+      pickupRes.lng == "" ||
+      dropoffRes.lat == "" ||
+      dropoffRes.lng == ""
+    ) {
+      toast({
+        position: "top",
+        title: "Search Error",
+        description: "Please enter a valid address",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    setResData({
+      pickup: {
+        lat: pickupRes.lat,
+        lng: pickupRes.lng,
+        address: pickupRes.address,
+      },
+      dropoff: {
+        lat: dropoffRes.lat,
+        lng: dropoffRes.lng,
+        address: dropoffRes.address,
+      },
+      date: date,
+      time: time,
+      tips: tips,
+    });
+
+    onOpen();
   };
   const handleConfirm = () => {
     onClose();
     const href = {
-      pathname: path.join("/rider", "search"),
+      pathname: path.join("/rider", "searchpage"),
       query: {
         pickupLocation: pickupLocation,
         dropoffLocation: dropoffLocation,
@@ -102,6 +150,18 @@ export default function RiderSearchInput() {
           color="black"
           value={dropoffLocation}
           onChange={(e) => setDropoffLocation(e.target.value)}
+        />
+        <Divider />
+
+        <Input
+          type="number"
+          placeholder="Enter your anticipated tips"
+          border="white"
+          color="black"
+          value={tips}
+          onChange={(e) => {
+            setTips(e.target.value);
+          }}
         />
       </Box>
       <Center height="30px" margin="10px">
@@ -131,9 +191,9 @@ export default function RiderSearchInput() {
         <ModalContent margin={"100px 10px"}>
           <GoogleMapsCard
             data={{
-              origin: pickupLocation,
+              origin: resData?.pickup?.lat + "," + resData?.pickup?.lng,
               waypoints: [],
-              destination: dropoffLocation,
+              destination: resData?.dropoff?.lat + "," + resData?.dropoff?.lng,
               travelMode:
                 "DRIVING" as DirectionsServiceProps["options"]["travelMode"],
             }}
@@ -147,8 +207,14 @@ export default function RiderSearchInput() {
             gap={2}
             color={"gray.500"}
           >
-            <Text>Pickup Location : {pickupLocation}</Text>
-            <Text>Dropoff Location : {dropoffLocation}</Text>
+            <Text>
+              Pickup Location : <br />
+              {resData?.pickup?.address}
+            </Text>
+            <Text>
+              Dropoff Location : <br />
+              {resData?.dropoff?.address}
+            </Text>
             <Text>
               Time : {date} {time}
             </Text>
