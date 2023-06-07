@@ -22,12 +22,6 @@ export default function SettingsPage() {
   }, [user]);
 
   const handleUpdate = async () => {
-    console.log(
-      JSON.stringify({
-        carType: vehicle.carType,
-        carPlate: vehicle.carPlate,
-      })
-    );
     const res = await authFetcher(`/user/${encodeURIComponent(user?.id)}`, {
       method: "PATCH",
       headers: {
