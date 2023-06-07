@@ -4,7 +4,6 @@ import RouteCard from "./RouteCard";
 
 export default function FindAvailableSection() {
   const { data: availableRoutes, error, isLoading } = useRouteRankings();
-  console.log("av", availableRoutes);
 
   return (
     <Box margin="20px">
