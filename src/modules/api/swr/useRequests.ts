@@ -5,7 +5,8 @@ import type { Request } from "@/modules/types/request";
 export const useRequests = ({ routeId }: { routeId: string }) => {
   const { data, error, isLoading } = useSWR(
     `/request?routeId=${encodeURIComponent(routeId)}`,
-    authFetcher
+    authFetcher,
+    { refreshInterval: 1000 }
   );
 
   return {
