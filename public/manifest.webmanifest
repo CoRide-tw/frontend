@@ -1,0 +1,16 @@
+{
+  "lang": "en",
+  "name": "CoRide",
+  "short_name": "CoRide",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "256x256",
+      "type": "ico"
+    }
+  ],
+  "id": "CoRide",
+  "scope": ".",
+  "display": "standalone",
+  "start_url": "/home"
+}
