@@ -11,22 +11,21 @@ export default function CurrentRequestSection() {
 
   const shouldFetch = !!Number(user?.id);
   const { data } = useSWR(
-    () => (shouldFetch ? `/request?riderId=${Number(user.id)}` : null),
+    () => (shouldFetch ? `/request?routeId=${Number(user.id)}` : null),
     authFetcher
   );
 
-  let cnt = data?.filter(
+  const filteredData = data?.filter(
     (item: any) =>
       item.status === "pending" && new Date(item.pickupEndTime) > new Date()
-  ).length;
-  console.log(data);
+  );
 
   return (
     <Flex margin={"20px"} direction={"column"}>
       <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
         Your Routes
       </Text>
-      {cnt ? (
+      {filteredData ? (
         <Flex
           borderRadius={"10px"}
           border={"1px solid #E2E8F0"}
@@ -35,10 +34,10 @@ export default function CurrentRequestSection() {
           justify={"space-between"}
           align={"center"}
           onClick={() => {
-            router.push("/driver/requests?new=1&routeId=");
+            // router.push(`/driver/requests?routeId=${}`);
           }}
         >
-          You have shared {cnt} routes to others
+          You have shared {filteredData.length} routes to others
           <ChevronRightIcon />
         </Flex>
       ) : (

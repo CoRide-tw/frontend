@@ -5,6 +5,9 @@ import { DirectionsServiceProps } from "@react-google-maps/api";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdModeStandby } from "react-icons/md";
 import { RxDividerVertical } from "react-icons/rx";
+import { useTrips } from "@/modules/api/swr/useTrips";
+import { useGeolocationToAddress } from "@/modules/api/swr/useGeolocationToAddress";
+import { formatDateTime } from "@/utils/formatTime";
 
 //request data
 const data = {
@@ -22,6 +25,7 @@ const data = {
   time: "18:00",
   date: "2023-05-23",
 };
+
 //parse data for GoogleMapsCard
 const gMapData = {
   origin: data.origin,
@@ -31,10 +35,46 @@ const gMapData = {
 };
 
 export default function YourTripsSection() {
+  const { data: tripData } = useTrips();
+
+  const sortedTrip = tripData?.rider || tripData?.driver;
+  const data = sortedTrip?.[0];
+
+  const { address: origin } = useGeolocationToAddress({
+    lat: data?.routeStartLocationLat || 0,
+    lng: data?.routeStartLocationLng || 0,
+  });
+  const { address: pickup } = useGeolocationToAddress({
+    lat: data?.pickupLocationLat || 0,
+    lng: data?.pickupLocationLng || 0,
+  });
+  const { address: dropoff } = useGeolocationToAddress({
+    lat: data?.dropoffLocationLat || 0,
+    lng: data?.dropoffLocationLng || 0,
+  });
+  const { address: destination } = useGeolocationToAddress({
+    lat: data?.routeEndLocationLat || 0,
+    lng: data?.routeEndLocationLng || 0,
+  });
+  const startTime = formatDateTime(new Date(data?.routeStartTime || ""));
+  const endTime = formatDateTime(new Date(data?.routeEndTime || ""));
+
+  if (!data)
+    return (
+      <Box margin="20px">
+        <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
+          Your Current Trip
+        </Text>
+        <Box>
+          <Text color="gray.500">You have not established a trip yet</Text>
+        </Box>
+      </Box>
+    );
+
   return (
     <Box margin="20px">
       <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
-        Current Trip
+        Your Current Trip
       </Text>
 
       <Flex
@@ -44,25 +84,52 @@ export default function YourTripsSection() {
         direction={"column"}
         padding={"12px"}
       >
-        <GoogleMapsCard data={gMapData} height="150px" />
-        <Text padding={"10px 0px"} color={"gray.400"}>
-          {data.date}
-          {"・"}
-          {data.time}
-        </Text>
-        <Flex padding={"5px 0px"} gap="4">
-          <MdModeStandby size="20px" />
-          <Text fontSize={"sm"}>{data.origin}</Text>
+        <GoogleMapsCard
+          data={{
+            origin: `${data.routeStartLocationLat},${data.routeStartLocationLng}`,
+            destination: `${data.routeEndLocationLat},${data.routeEndLocationLng}`,
+            waypoints: [
+              {
+                location: {
+                  lat: data.pickupLocationLat,
+                  lng: data.pickupLocationLng,
+                },
+              },
+              {
+                location: {
+                  lat: data.dropoffLocationLat,
+                  lng: data.dropoffLocationLng,
+                },
+              },
+            ],
+            travelMode:
+              "DRIVING" as DirectionsServiceProps["options"]["travelMode"],
+          }}
+          height="150px"
+        />
+        <Flex direction="column" gap="2px" margin="8px">
+          <Text fontSize={"sm"} color="gray.500">
+            Departure: {startTime.date} {startTime.time}
+          </Text>
+          <Text fontSize={"sm"} color="gray.500">
+            Arrival: {endTime.date} {endTime.time}
+          </Text>
         </Flex>
-        {data.waypoints.map((waypoint, index) => (
-          <Flex padding={"5px 0px"} key={index} gap="4">
-            <RxDividerVertical size="20px" />
-            <Text fontSize={"sm"}>{waypoint.location}</Text>
-          </Flex>
-        ))}
-        <Flex padding={"5px 0px"} gap="4">
+        <Flex padding={"5px 0px"} gap="4" align="center">
+          <MdModeStandby size="20px" />
+          <Text fontSize={"xs"}>{origin}</Text>
+        </Flex>
+        <Flex padding={"5px 0px"} gap="4" align="center">
+          <RxDividerVertical size="20px" />
+          <Text fontSize={"xs"}>{pickup}</Text>
+        </Flex>
+        <Flex padding={"5px 0px"} gap="4" align="center">
+          <RxDividerVertical size="20px" />
+          <Text fontSize={"xs"}>{dropoff}</Text>
+        </Flex>
+        <Flex padding={"5px 0px"} gap="4" align="center">
           <FaMapMarkerAlt size="20px" />
-          <Text fontSize={"sm"}>{data.destination}</Text>
+          <Text fontSize={"xs"}>{destination}</Text>
         </Flex>
       </Flex>
     </Box>

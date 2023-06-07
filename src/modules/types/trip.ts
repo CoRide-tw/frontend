@@ -22,3 +22,32 @@ export interface Trip {
   carPlate?: CarPlate;
   attachedUsers?: UserDisplay[];
 }
+
+export type CurrentTripType = {
+  id: number;
+  riderId: number;
+  driverId: number;
+  requestId: number;
+  routeId: number;
+  driverName: string;
+  driverPictureUrl: string;
+  driverCarType: string;
+  driverCarPlate: string;
+  routeStartTime: string;
+  pickupStartTime: string;
+  pickupEndTime: string;
+  routeEndTime: string;
+  routeStartLocationLng: number;
+  routeStartLocationLat: number;
+  routeEndLocationLng: number;
+  routeEndLocationLat: number;
+  pickupLocationLng: number;
+  pickupLocationLat: number;
+  dropoffLocationLng: number;
+  dropoffLocationLat: number;
+  createdAt: string;
+};
+export type CurrentTripResponse = {
+  rider: CurrentTripType[] | undefined;
+  driver: CurrentTripType[] | undefined;
+};
