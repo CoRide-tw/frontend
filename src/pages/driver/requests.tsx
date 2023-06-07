@@ -65,10 +65,12 @@ const RequestCards = ({ routeId }: { routeId: string }) => {
 export default function RequestsListView() {
   const router = useRouter();
   const toast = useToast();
-  const [newQuery, setNewQuery] = useState(true);
+
+  const toastShown = useRef(false);
 
   useEffect(() => {
-    if (router.query.new === "1" && newQuery) {
+    if (toastShown.current === false && router.query.new === "1") {
+      toastShown.current = true;
       toast({
         title: "Share Success",
         status: "success",
@@ -78,7 +80,7 @@ export default function RequestsListView() {
 
       setNewQuery(false);
     }
-  }, [router.query]);
+  }, []);
 
   return (
     <NestedLayout title="Driver List">
