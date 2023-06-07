@@ -1,6 +1,6 @@
 import NestedLayout from "@/modules/layouts/Nested";
 import { Money, TripPoint } from "@/modules/types/trip";
-import { User, UserId, UserRating } from "@/modules/types/user";
+import { User, UserDisplay, UserId, UserRating } from "@/modules/types/user";
 import { Avatar, Box, Flex, Icon, IconButton } from "@chakra-ui/react";
 import { AiOutlineDollar } from "react-icons/ai";
 import { BiCurrentLocation } from "react-icons/bi";
@@ -13,28 +13,16 @@ import { Request, RequestId } from "@/modules/types/request";
 import { useEffect, useState } from "react";
 import { getFirstQuery } from "@/utils/getFirstQuery";
 import { getClientCookies } from "@/utils/cookies";
+import { useRequests } from "@/modules/api/swr/useRequests";
 
 const UserBadge = ({
-  userId,
+  user,
   rating,
   ...props
 }: {
-  userId: UserId;
+  user: UserDisplay;
   rating?: UserRating;
 }) => {
-  // TODO: replace mock user
-  const mockUser: User = {
-    id: 0,
-    name: "Jotpac",
-    pictureUrl: "",
-    email: "abc@example.com",
-    googleId: "",
-    createdAt: "",
-    updatedAt: "",
-  };
-
-  const user = mockUser;
-
   return (
     <Flex alignItems="center" gap="5" {...props}>
       <Avatar src={user.pictureUrl} name={user.name} size="lg" />
@@ -163,20 +151,20 @@ const ActionRow = ({ request }: { request: Request }) => {
   );
 };
 
-const fetchRequest = async (requestId: RequestId) => {
-  return await authFetcher(`/request/${requestId}`);
-};
-
-function DriverRequestDetailPage({ router }: { router: NextRouter }) {
+const DriverRequestDetail = ({
+  routeId,
+  requestId,
+}: {
+  routeId: string;
+  requestId: number;
+}) => {
+  const { requests, isLoading } = useRequests({ routeId });
   const [request, setRequest] = useState<Request>();
 
   useEffect(() => {
-    if (!router.query.id) return;
-
-    fetchRequest(Number(getFirstQuery(router.query.id))).then((ret) =>
-      setRequest(ret)
-    );
-  }, [router]);
+    if (isLoading) return;
+    setRequest(requests.find((req) => req.id === requestId));
+  }, [requests]);
 
   if (!request) return <>Loading...</>;
 
@@ -198,13 +186,27 @@ function DriverRequestDetailPage({ router }: { router: NextRouter }) {
   return (
     <NestedLayout title="Agree or reject">
       <Box mx="8">
-        <UserBadge userId={request.riderId} />
+        <UserBadge
+          user={{
+            name: request.riderName,
+            pictureUrl: request.riderPictureUrl,
+          }}
+        />
         <TripPointsRows start={tripStart} end={tripEnd} />
         <Tip tip={tip} />
         <ActionRow request={request} />
       </Box>
     </NestedLayout>
   );
+};
+
+function DriverRequestDetailPage({ router }: { router: NextRouter }) {
+  if (!router.query.id) return <>Loading...</>;
+
+  const routeId = getFirstQuery(router.query.routeId) as string;
+  const requestId = Number(getFirstQuery(router.query.id));
+
+  return <DriverRequestDetail routeId={routeId} requestId={requestId} />;
 }
 
 export default withRouter(DriverRequestDetailPage);

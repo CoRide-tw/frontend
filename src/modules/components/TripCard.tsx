@@ -3,11 +3,10 @@ import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 import { Progress, HStack, Heading, Text } from "@chakra-ui/react";
 import { PropsWithoutRef } from "react";
 
-import { BsStarFill } from "react-icons/bs";
 import { BsFillCarFrontFill } from "react-icons/bs";
 import { FaLocationArrow, FaMapMarkerAlt } from "react-icons/fa";
 
-import type { User, UserRating } from "../types/user";
+import type { UserDisplay, UserRating } from "../types/user";
 import type { CarPlate, Money, Trip, TripPoint } from "../types/trip";
 
 const UserBadge = ({
@@ -15,7 +14,7 @@ const UserBadge = ({
   rating,
   ...props
 }: {
-  user: User;
+  user: UserDisplay;
   rating?: UserRating;
 }) => (
   <Flex alignItems="center" gap="4" {...props}>
@@ -127,7 +126,11 @@ const CarPlateCol = ({ carPlate }: { carPlate?: CarPlate }) => {
   );
 };
 
-const AttachedUserCol = ({ attachedUsers }: { attachedUsers?: User[] }) => {
+const AttachedUserCol = ({
+  attachedUsers,
+}: {
+  attachedUsers?: UserDisplay[];
+}) => {
   if (attachedUsers === undefined) return <></>;
 
   const avatars = attachedUsers.map((user, index) => (

@@ -21,6 +21,8 @@ export type Request = {
   pickupStartTime: TimeString;
   pickupEndTime: TimeString;
   status: RequestStatus;
+  riderName: string;
+  riderPictureUrl: string;
   createdAt: TimeString;
   updatedAt: TimeString;
   tips: TipAmount;

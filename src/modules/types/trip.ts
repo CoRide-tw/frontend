@@ -1,4 +1,4 @@
-import { User, UserRating } from "./user";
+import { UserDisplay, UserRating } from "./user";
 
 export type TripPoint = {
   location: string;
@@ -13,12 +13,12 @@ export type Money = {
 export type CarPlate = string;
 
 export interface Trip {
-  user: User;
+  user: UserDisplay;
   userRating?: UserRating;
   tip: Money;
   date: Date;
   start: TripPoint;
   end: TripPoint;
   carPlate?: CarPlate;
-  attachedUsers?: User[];
+  attachedUsers?: UserDisplay[];
 }
