@@ -5,6 +5,8 @@ import { DirectionsServiceProps } from "@react-google-maps/api";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdModeStandby } from "react-icons/md";
 import { RxDividerVertical } from "react-icons/rx";
+import { useCurrentTrip } from "@/modules/api/swr/useCurrentTrip";
+import { useGeolocationToAddress } from "@/modules/api/swr/useGeolocationToAddress";
 
 //request data
 const data = {
@@ -31,6 +33,26 @@ const gMapData = {
 };
 
 export default function YourTripsSection() {
+  const { trip, isLoading } = useCurrentTrip();
+
+  const { address: pickupAddress } = useGeolocationToAddress({
+    lat: trip?.pickupLocationLat,
+    lng: trip?.pickupLocationLng,
+  });
+
+  const { address: dropoffAddress } = useGeolocationToAddress({
+    lat: trip?.dropoffLocationLat,
+    lng: trip?.dropoffLocationLng,
+  });
+
+  if (isLoading) return <></>;
+
+  const gMapData = {
+    origin: pickupAddress,
+    destination: dropoffAddress,
+    travelMode: data.travelMode,
+  };
+
   return (
     <Box margin="20px">
       <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
@@ -52,17 +74,17 @@ export default function YourTripsSection() {
         </Text>
         <Flex padding={"5px 0px"} gap="4">
           <MdModeStandby size="20px" />
-          <Text fontSize={"sm"}>{data.origin}</Text>
+          <Text fontSize={"sm"}>{gMapData.origin}</Text>
         </Flex>
-        {data.waypoints.map((waypoint, index) => (
+        {/* {data.waypoints.map((waypoint, index) => (
           <Flex padding={"5px 0px"} key={index} gap="4">
             <RxDividerVertical size="20px" />
             <Text fontSize={"sm"}>{waypoint.location}</Text>
           </Flex>
-        ))}
+        ))} */}
         <Flex padding={"5px 0px"} gap="4">
           <FaMapMarkerAlt size="20px" />
-          <Text fontSize={"sm"}>{data.destination}</Text>
+          <Text fontSize={"sm"}>{gMapData.destination}</Text>
         </Flex>
       </Flex>
     </Box>
