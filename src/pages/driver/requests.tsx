@@ -8,22 +8,16 @@ import TripCard from "@/modules/components/TripCard";
 import { Request } from "@/modules/types/request";
 import { Trip } from "@/modules/types/trip";
 import Link from "next/link";
-import { User } from "@/modules/types/user";
+import { UserDisplay } from "@/modules/types/user";
 
 const Card = ({ request }: PropsWithoutRef<{ request: Request }>) => {
-  // TODO: replace mock user
-  const mockUser: User = {
-    id: 0,
-    name: "Jotpac",
-    pictureUrl: "",
-    email: "abc@example.com",
-    googleId: "",
-    createdAt: "",
-    updatedAt: "",
+  const user: UserDisplay = {
+    name: request.riderName,
+    pictureUrl: request.riderPictureUrl,
   };
 
   const trip: Trip = {
-    user: mockUser,
+    user,
     tip: { amount: request.tips, currency: "NTD" },
     date: new Date(request.pickupStartTime),
     start: {
@@ -54,7 +48,7 @@ const RequestCards = ({ routeId }: { routeId: string }) => {
   );
 
   const cards = pendingRequests.map((request: Request, index) => (
-    <Link key={index} href={`/driver/request/${request.id}`}>
+    <Link key={index} href={`/driver/request/${request.id}?routeId=${routeId}`}>
       <Card request={request} />
     </Link>
   ));

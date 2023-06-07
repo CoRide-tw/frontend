@@ -16,4 +16,9 @@ export type User = {
   updatedAt: TimeString;
 };
 
+export type UserDisplay = {
+  name: Name;
+  pictureUrl: PictureUrl;
+};
+
 export type UserRating = number;
