@@ -20,11 +20,11 @@ export default function GreetingSection() {
       <Text fontWeight={600} fontSize={"2xl"}>
         Hello, {user?.name}
       </Text>
-      <InputGroup onClick={handleClick} margin={"20px 0px 0px"}>
+      <InputGroup onClick={handleClick} margin={"10px 0px"}>
         <InputLeftElement>
           <SearchIcon color={"gray.400"} />
         </InputLeftElement>
-        <Input placeholder="Where to?" isReadOnly />
+        <Input placeholder="Where to?" />
       </InputGroup>
     </Flex>
   );
