@@ -91,7 +91,13 @@ const Tip = ({ tip }: { tip: Money }) => (
   </Flex>
 );
 
-const ActionRow = ({ request }: { request: Request }) => {
+const ActionRow = ({
+  request,
+  routeId,
+}: {
+  request: Request;
+  routeId: string;
+}) => {
   const router = useRouter();
 
   const acceptRequest = async ({ request }: { request: Request }) => {
@@ -111,7 +117,7 @@ const ActionRow = ({ request }: { request: Request }) => {
         }),
       });
 
-      router.back();
+      router.push(`/driver/requests?routeId=${routeId}`);
     } catch (error) {
       console.log(error);
     }
@@ -194,7 +200,7 @@ const DriverRequestDetail = ({
         />
         <TripPointsRows start={tripStart} end={tripEnd} />
         <Tip tip={tip} />
-        <ActionRow request={request} />
+        <ActionRow request={request} routeId={routeId} />
       </Box>
     </NestedLayout>
   );
