@@ -2,7 +2,7 @@ import { useRequests } from "@/modules/api/swr/useRequests";
 import NestedLayout from "@/modules/layouts/Nested";
 import { Box, Center, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { PropsWithoutRef, useEffect, useMemo, useState } from "react";
+import { PropsWithoutRef, useEffect, useRef } from "react";
 import { getFirstQuery } from "@/utils/getFirstQuery";
 import TripCard from "@/modules/components/TripCard";
 import { Request } from "@/modules/types/request";
@@ -78,7 +78,11 @@ export default function RequestsListView() {
         position: "bottom",
       });
 
-      setNewQuery(false);
+      history.replaceState(
+        null,
+        "",
+        `/driver/requests?routeId=${router.query.routeId}`
+      );
     }
   }, []);
 

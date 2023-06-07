@@ -108,9 +108,6 @@ const SubmitShareForm = async (event: FormEvent<HTMLFormElement>) => {
     endLong,
   };
 
-  console.log(body);
-  console.log("json string", JSON.stringify(body));
-
   const data = await authFetcher("/route", {
     method: "POST",
     headers: {
@@ -133,7 +130,7 @@ export default function ShareRide() {
         id="trip-share-form"
         onSubmit={(e) => {
           SubmitShareForm(e).then((id) =>
-            router.push(`/driver/requests?new=1&routeId=${id}`)
+            router.replace(`/driver/requests?new=1&routeId=${id}`)
           );
         }}
       >
