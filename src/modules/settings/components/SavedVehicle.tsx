@@ -10,10 +10,6 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 
-type Vehicle = {
-  car: string;
-  num: string;
-};
 interface Props {
   vehicle: Vehicle;
   setVehicle: Dispatch<SetStateAction<Vehicle>>;
@@ -22,10 +18,11 @@ interface Props {
 export default function SavedVehicle({ vehicle, setVehicle }: Props) {
   const handleChange = ({ type, value }: { type: string; value: string }) => {
     let newVehicle = { ...vehicle };
-    if (type == "car") newVehicle.car = value;
-    if (type == "num") newVehicle.num = value;
-    console.log(newVehicle);
+    if (type == "carType") newVehicle.carType = value;
+    if (type == "carPlate") newVehicle.carPlate = value;
+
     setVehicle(newVehicle);
+    console.log(vehicle);
   };
 
   return (
@@ -38,10 +35,10 @@ export default function SavedVehicle({ vehicle, setVehicle }: Props) {
         <FormLabel color="gray.500">Vehicle Type</FormLabel>
         <InputGroup>
           <Input
-            value={vehicle.car}
+            value={vehicle.carType}
             onChange={(e) =>
               handleChange({
-                type: "car",
+                type: "carType",
                 value: e.target.value,
               })
             }
@@ -53,10 +50,10 @@ export default function SavedVehicle({ vehicle, setVehicle }: Props) {
 
         <FormLabel color="gray.500">Number</FormLabel>
         <Input
-          value={vehicle.num}
+          value={vehicle.carPlate}
           onChange={(e) =>
             handleChange({
-              type: "num",
+              type: "carPlate",
               value: e.target.value,
             })
           }
