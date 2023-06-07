@@ -33,6 +33,10 @@ export type RouteResponse = {
   startTime: TimeString;
   endTime: TimeString;
   capacity: RouteCapacity;
+  driverName: string;
+  driverPictureUrl: string;
+  driverCarType: string;
+  driverCarPlate: string;
   createdAt: TimeString;
   updatedAt: TimeString;
 };
