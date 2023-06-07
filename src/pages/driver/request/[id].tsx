@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { getFirstQuery } from "@/utils/getFirstQuery";
 import { getClientCookies } from "@/utils/cookies";
 import { useRequests } from "@/modules/api/swr/useRequests";
+import { useGeolocationToAddress } from "@/modules/api/swr/useGeolocationToAddress";
 
 const UserBadge = ({
   user,
@@ -44,14 +45,31 @@ const UserBadge = ({
 };
 
 const TripPointsRows = ({
-  start,
-  end,
+  request,
   customTimeLocale,
 }: {
-  start: TripPoint;
-  end: TripPoint;
+  request: Request;
   customTimeLocale?: Intl.DateTimeFormat;
 }) => {
+  const { address: pickupAddress } = useGeolocationToAddress({
+    lat: request.pickupLat,
+    lng: request.pickupLong,
+  });
+  const { address: dropoffAddress } = useGeolocationToAddress({
+    lat: request.dropoffLat,
+    lng: request.dropoffLong,
+  });
+
+  const start: TripPoint = {
+    location: pickupAddress,
+    time: new Date(request.pickupStartTime),
+  };
+
+  const end: TripPoint = {
+    location: dropoffAddress,
+    time: new Date(request.pickupEndTime),
+  };
+
   const timeLocale =
     customTimeLocale ??
     Intl.DateTimeFormat([], {
@@ -174,16 +192,6 @@ const DriverRequestDetail = ({
 
   if (!request) return <>Loading...</>;
 
-  const tripStart: TripPoint = {
-    location: `${request.pickupLong}, ${request.pickupLat}`,
-    time: new Date(request.pickupStartTime),
-  };
-
-  const tripEnd: TripPoint = {
-    location: `${request.dropoffLong}, ${request.dropoffLat}`,
-    time: new Date(request.pickupEndTime),
-  };
-
   const tip: Money = {
     amount: request.tips,
     currency: "NT",
@@ -198,7 +206,7 @@ const DriverRequestDetail = ({
             pictureUrl: request.riderPictureUrl,
           }}
         />
-        <TripPointsRows start={tripStart} end={tripEnd} />
+        <TripPointsRows request={request} />
         <Tip tip={tip} />
         <ActionRow request={request} routeId={routeId} />
       </Box>

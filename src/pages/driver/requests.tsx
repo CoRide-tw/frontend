@@ -9,6 +9,7 @@ import { Request } from "@/modules/types/request";
 import { Trip } from "@/modules/types/trip";
 import Link from "next/link";
 import { UserDisplay } from "@/modules/types/user";
+import { useGeolocationToAddress } from "@/modules/api/swr/useGeolocationToAddress";
 
 const Card = ({ request }: PropsWithoutRef<{ request: Request }>) => {
   const user: UserDisplay = {
@@ -16,16 +17,25 @@ const Card = ({ request }: PropsWithoutRef<{ request: Request }>) => {
     pictureUrl: request.riderPictureUrl,
   };
 
+  const { address: pickupAddress } = useGeolocationToAddress({
+    lat: request.pickupLat,
+    lng: request.pickupLong,
+  });
+  const { address: dropoffAddress } = useGeolocationToAddress({
+    lat: request.dropoffLat,
+    lng: request.dropoffLong,
+  });
+
   const trip: Trip = {
     user,
     tip: { amount: request.tips, currency: "NTD" },
     date: new Date(request.pickupStartTime),
     start: {
-      location: `${request.pickupLong}, ${request.pickupLat}`,
+      location: pickupAddress,
       time: new Date(request.pickupStartTime),
     },
     end: {
-      location: `${request.dropoffLong}, ${request.dropoffLat}`,
+      location: dropoffAddress,
       time: new Date(request.pickupEndTime),
     },
   };
