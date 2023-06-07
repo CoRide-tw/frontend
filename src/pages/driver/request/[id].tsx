@@ -164,7 +164,7 @@ const DriverRequestDetail = ({
   useEffect(() => {
     if (isLoading) return;
     setRequest(requests.find((req) => req.id === requestId));
-  }, [requests]);
+  }, [isLoading, requestId, requests]);
 
   if (!request) return <>Loading...</>;
 
