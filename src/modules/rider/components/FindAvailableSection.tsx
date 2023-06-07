@@ -4,6 +4,7 @@ import RouteCard from "./RouteCard";
 
 export default function FindAvailableSection() {
   const { data: availableRoutes, error, isLoading } = useRouteRankings();
+  console.log(availableRoutes);
 
   return (
     <Box margin="20px">
@@ -11,7 +12,6 @@ export default function FindAvailableSection() {
         Best Matches
       </Text>
 
-      <Divider />
       <Flex direction="column" gap="8px">
         {availableRoutes.map((data) => (
           <RouteCard key={data.id} data={data} />

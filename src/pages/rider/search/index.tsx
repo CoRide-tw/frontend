@@ -1,4 +1,4 @@
-import RiderSearchInput from "@/modules/components/RiderSearchBar";
+import RiderSearchBar from "@/modules/components/RiderSearchBar";
 import NestedLayout from "@/modules/layouts/Nested";
 import { useRouter } from "next/router";
 
@@ -8,9 +8,9 @@ export default function SearchPage() {
   return (
     <NestedLayout
       title="Search"
-      backButtonCallback={() => router.push("/rider/search")}
+      backButtonCallback={() => router.push("/home")}
     >
-      <RiderSearchInput />
+      <RiderSearchBar />
     </NestedLayout>
   );
 }

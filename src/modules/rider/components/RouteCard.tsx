@@ -1,28 +1,33 @@
-import useFetchUser from "@/modules/api/swr/useFetchUser";
+import { authFetcher } from "@/modules/api/fetcher";
+import { useGeolocationToAddress } from "@/modules/api/swr/useGeolocationToAddress";
+import { useUser } from "@/modules/api/swr/useUser";
+import GoogleMapsCard from "@/modules/components/GoogleMapsCard";
+import { useRiderSearchInput } from "@/modules/components/RiderSearchBar/store";
 import { RouteResponse } from "@/modules/types/route";
 import { CarPlate, Money, TripPoint } from "@/modules/types/trip";
-import { User, UserRating } from "@/modules/types/user";
+import { User } from "@/modules/types/user";
+import { formatDateTime } from "@/utils/formatTime";
 
-import getAddress from "@/utils/getAddress";
 import {
   Avatar,
   AvatarGroup,
   Box,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
+  Button,
   Flex,
   HStack,
   Heading,
   Progress,
   Spacer,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import { get } from "http";
-import { PropsWithoutRef } from "react";
+import { DirectionsServiceProps } from "@react-google-maps/api";
+import { useRouter } from "next/router";
+import { PropsWithoutRef, useEffect } from "react";
 import { BsFillCarFrontFill } from "react-icons/bs";
 import { FaLocationArrow, FaMapMarkerAlt } from "react-icons/fa";
+import { MdModeStandby } from "react-icons/md";
+import { RxDividerVertical } from "react-icons/rx";
 
 // sample data format
 const route = {
@@ -38,42 +43,6 @@ const route = {
   createdAt: "2023-06-06T14:56:06.359793Z",
   updatedAt: "2023-06-06T14:56:06.359793Z",
 };
-
-interface Props {
-  data: RouteResponse;
-}
-const UserBadge = ({
-  user,
-  rating,
-  ...props
-}: {
-  user: User;
-  rating?: UserRating;
-}) => (
-  <Flex alignItems="center" gap="4" {...props}>
-    <Avatar name={user.name} src={user.pictureUrl} />
-    <Box>
-      <Heading size="sm">{user.name}</Heading>
-      {rating ? (
-        <HStack>
-          <Progress
-            minW="65px"
-            value={rating ? (rating / 5) * 100 : 0}
-            colorScheme="green"
-            my="1"
-            bgColor="gray.300"
-            borderRadius="10"
-          />
-          <Text fontSize="xs" fontWeight="700">
-            {rating}/5
-          </Text>
-        </HStack>
-      ) : (
-        <></>
-      )}
-    </Box>
-  </Flex>
-);
 
 const DateRow = ({
   date,
@@ -161,53 +130,151 @@ const AttachedUserCol = ({ attachedUsers }: { attachedUsers?: User[] }) => {
 
   return <AvatarGroup pl="2">{avatars}</AvatarGroup>;
 };
+
 export default function RouteCard({
   data,
   customTimeLocale,
   customDateLocale,
 }: PropsWithoutRef<{
-  data: any;
+  data: RouteResponse;
   customTimeLocale?: Intl.DateTimeFormat;
   customDateLocale?: Intl.DateTimeFormat;
 }>) {
-  console.log(data);
-  const res = useFetchUser(data?.driverId.toString());
-  const user = res?.user;
+  const toast = useToast();
+  const { user } = useUser();
+  const router = useRouter();
+  const { inputState } = useRiderSearchInput();
+  const startTime = formatDateTime(new Date(data.startTime));
+  const endTime = formatDateTime(new Date(data.endTime));
 
-  console.log(getAddress({ lat: route.startLat, lng: route.startLong }));
+  const { address: startAddress } = useGeolocationToAddress({
+    lat: data.startLat,
+    lng: data.startLong,
+  });
+  const { address: endAddress } = useGeolocationToAddress({
+    lat: data.endLat,
+    lng: data.endLong,
+  });
 
-  getAddress({ lat: route.endLat, lng: route.endLong });
-  // const routeId = data?.id.toString();
-  // console.log(routeId);
-  // const { route, error, isLoading } = useRouteDetail({ routeId });
-  // console.log(route, error, isLoading);
+  const handleRequest = async () => {
+    console.log({
+      routeId: data.id,
+      riderId: user.id,
+      pickupLong: inputState?.pickupLong,
+      pickupLat: inputState?.pickupLat,
+      dropoffLong: inputState?.dropoffLong,
+      dropoffLat: inputState?.dropoffLat,
+      pickupStartTime: inputState?.pickupStartTime,
+      pickupEndTime: inputState?.pickupEndTime,
+      tips: inputState?.tips,
+    });
+    const res = await authFetcher(`/request`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        routeId: data.id,
+        riderId: user.id,
+        pickupLong: inputState?.pickupLong,
+        pickupLat: inputState?.pickupLat,
+        dropoffLong: inputState?.dropoffLong,
+        dropoffLat: inputState?.dropoffLat,
+        pickupStartTime: inputState?.pickupStartTime,
+        pickupEndTime: inputState?.pickupEndTime,
+        tips: inputState?.tips,
+      }),
+    });
+
+    if (res) {
+      toast({
+        position: "top",
+        title: "Request sent!",
+        description: `Requested ${data.driverName}'s ride`,
+        status: "success",
+        duration: 3000,
+        isClosable: false,
+      });
+
+      router.push("/home");
+    } else {
+      toast({
+        position: "top",
+        title: "Request sent!",
+        description: `Requested ${data.driverName}'s ride`,
+        status: "success",
+        duration: 3000,
+        isClosable: false,
+      });
+    }
+  };
+
   return (
-    <Card bgColor="#EEEEEE" m="3" borderRadius="xl">
-      <CardHeader bgGradient="linear(#EEEEEE, #E1E1E1)" borderTopRadius="xl">
-        <Flex>
-          <UserBadge user={user} rating={4.8} />
-          <Spacer />
+    <Flex
+      direction="column"
+      gap="8px"
+      borderRadius="8px"
+      border="1px"
+      borderColor="gray.200"
+      p="8px"
+    >
+      <GoogleMapsCard
+        data={{
+          origin: `${data.startLat},${data.startLong}`,
+          destination: `${data.endLat},${data.endLong}`,
+          travelMode:
+            "DRIVING" as DirectionsServiceProps["options"]["travelMode"],
+        }}
+        height="150px"
+      />
+
+      <Flex alignItems="center" gap="4" p="4px">
+        <Avatar name={data.driverName} src={data.driverPictureUrl} />
+        <Box>
+          <Heading size="sm">{data.driverName}</Heading>
+
+          <HStack>
+            <Progress
+              minW="65px"
+              value={(4.3 / 5) * 100}
+              colorScheme="green"
+              my="1"
+              bgColor="gray.300"
+              borderRadius="10"
+            />
+            <Text fontSize="xs" fontWeight="700">
+              {4.3}/5
+            </Text>
+          </HStack>
+        </Box>
+      </Flex>
+
+      <Flex direction="column" gap="2px" paddingInline="4px">
+        <Text color={"gray.500"} fontSize={"sm"}>
+          {startTime.date} {startTime.time}
+        </Text>
+        <Flex align="center">
+          <Text color={"gray.500"} fontSize={"xs"} w="40px">
+            From:
+          </Text>
+          <Text fontSize={"sm"}>{startAddress}</Text>
         </Flex>
-      </CardHeader>
-      <CardBody py="2">
-        <DateRow
-          date={new Date(route.startTime)}
-          customDateLocale={customDateLocale}
-        />
-        <TripPointsRows
-          start={getAddress({ lat: route.startLat, lng: route.startLong })}
-          end={getAddress({ lat: route.endLat, lng: route.endLong })}
-          startTime={new Date(route.startTime)}
-          endTime={new Date(route.endTime)}
-          customTimeLocale={customTimeLocale}
-        />
-      </CardBody>
-      <CardFooter py="2">
-        <HStack>
-          {/* <CarPlateCol carPlate={trip.carPlate} /> */}
-          {/* <AttachedUserCol attachedUsers={trip.attachedUsers} /> */}
-        </HStack>
-      </CardFooter>
-    </Card>
+      </Flex>
+      <Flex direction="column" gap="2px" paddingInline="4px">
+        <Text color={"gray.500"} fontSize={"sm"}>
+          {endTime.date} {endTime.time}
+        </Text>
+        <Flex align="center">
+          <Text color={"gray.500"} fontSize={"xs"} w="40px">
+            To:
+          </Text>
+          <Text fontSize={"sm"}>{endAddress}</Text>
+        </Flex>
+      </Flex>
+
+      <Flex justify="end">
+        <Button onClick={handleRequest}>Request</Button>
+      </Flex>
+    </Flex>
   );
 }

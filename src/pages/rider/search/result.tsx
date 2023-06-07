@@ -21,7 +21,7 @@ export default function SearchResultPage() {
 
   if (!data) {
     return (
-      <NestedLayout title="Request Your Ride">
+      <NestedLayout title="Find Your Drive">
         <Center h="calc(100vh - 60px)" color="blackAlpha.600">
           No Drivers are available at the moment.
         </Center>
@@ -30,7 +30,7 @@ export default function SearchResultPage() {
   }
   return (
     <NestedLayout
-      title="Request Your Ride"
+      title="Find Your Driver"
       backButtonCallback={() => router.push("/rider/search")}
     >
       <SearchInputDisplaySection />

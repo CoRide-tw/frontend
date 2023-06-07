@@ -1,15 +1,16 @@
 import { authFetcher } from "@/modules/api/fetcher";
 import { useUser } from "@/modules/api/swr/useUser";
 import { ChevronRightIcon } from "@chakra-ui/icons";
-import { Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
 export default function CurrentRequestSection() {
   const { user } = useUser();
   const router = useRouter();
+
   const shouldFetch = !!Number(user?.id);
-  const { data, error, isLoading } = useSWR(
+  const { data } = useSWR(
     () => (shouldFetch ? `/request?riderId=${Number(user.id)}` : null),
     authFetcher
   );
@@ -20,13 +21,12 @@ export default function CurrentRequestSection() {
   ).length;
   console.log(data);
 
-  if (cnt === 0) return null;
-  else
-    return (
-      <Flex margin={"20px"} direction={"column"}>
-        <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
-          Requests
-        </Text>
+  return (
+    <Flex margin={"20px"} direction={"column"}>
+      <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
+        Your Routes
+      </Text>
+      {cnt ? (
         <Flex
           borderRadius={"10px"}
           border={"1px solid #E2E8F0"}
@@ -38,9 +38,14 @@ export default function CurrentRequestSection() {
             router.push("/driver/requests?new=1&routeId=");
           }}
         >
-          You have {cnt} requests waiting.
+          You have shared {cnt} routes to others
           <ChevronRightIcon />
         </Flex>
-      </Flex>
-    );
+      ) : (
+        <Box>
+          <Text color="gray.500">You have not share any routes yet</Text>
+        </Box>
+      )}
+    </Flex>
+  );
 }

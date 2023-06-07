@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Box, Button, useToast } from "@chakra-ui/react";
 
 import { useRouter } from "next/router";
@@ -41,6 +41,15 @@ export default function RiderSearchBar() {
     endDateTime;
 
   const { setInputState } = useRiderSearchInput();
+
+  const origin = useMemo(
+    () => `${pickupLocGeocoding?.lat}, ${pickupLocGeocoding?.lng}`,
+    [pickupLocGeocoding?.lat, pickupLocGeocoding?.lng]
+  );
+  const destination = useMemo(
+    () => `${dropoffLocGeocoding?.lat}, ${dropoffLocGeocoding?.lng}`,
+    [dropoffLocGeocoding?.lat, dropoffLocGeocoding?.lng]
+  );
 
   const handleSearch = async () => {
     const startTime = new Date(
@@ -128,10 +137,7 @@ export default function RiderSearchBar() {
   return (
     <Box position="relative">
       <Box height="100vh" paddingTop="200px">
-        <Maps
-          origin={`${pickupLocGeocoding?.lat}, ${pickupLocGeocoding?.lng}`}
-          destination={`${dropoffLocGeocoding?.lat}, ${dropoffLocGeocoding?.lng}`}
-        />
+        <Maps origin={origin} destination={destination} />
       </Box>
 
       <Box

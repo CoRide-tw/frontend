@@ -5,6 +5,7 @@ import Head from "next/head";
 import GreetingSection from "@/modules/home/components/GreetingSection";
 import PageBar from "@/modules/home/components/PageBar";
 import CurrentRequestSection from "@/modules/home/components/CurrentRequestSection";
+import CurrentRouteSection from "@/modules/home/components/CurrentRouteSection";
 
 export default function HomePage() {
   return (
@@ -16,8 +17,9 @@ export default function HomePage() {
         <GreetingSection />
         <ShareYourRideCard />
         <PageBar />
-        <CurrentRequestSection />
         <YourTripsSection />
+        <CurrentRequestSection />
+        <CurrentRouteSection />
       </HomeLayout>
     </>
   );
