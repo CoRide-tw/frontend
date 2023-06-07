@@ -124,7 +124,9 @@ export default function PersonalDetails() {
           borderRadius={"20px"}
           onClick={() => setIsJoin(true)}
         >
-          <Text fontWeight="600">{!!data?.rider ? data?.rider.length : 0}</Text>
+          <Text fontWeight="600">
+            {!!data?.rider ? data?.rider?.length : 0}
+          </Text>
           <Text fontWeight="600">Rides</Text>
         </Flex>
 
@@ -140,7 +142,7 @@ export default function PersonalDetails() {
           onClick={() => setIsJoin(false)}
         >
           <Text fontWeight="600">
-            {!!data?.driver ? data?.driver.length : 0}
+            {!!data?.driver ? data?.driver?.length : 0}
           </Text>
           <Text fontWeight="600">Drives</Text>
         </Flex>

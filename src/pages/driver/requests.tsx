@@ -36,7 +36,7 @@ const Card = ({ request }: PropsWithoutRef<{ request: Request }>) => {
 const RequestCards = ({ routeId }: { routeId: string }) => {
   const { requests } = useRequests({ routeId });
 
-  if (!requests || requests.length === 0)
+  if (!requests || requests?.length === 0)
     return (
       <Center h="full" color="blackAlpha.600">
         No Rider Request

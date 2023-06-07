@@ -28,7 +28,7 @@ export default function CurrentRequestSection() {
       <Text fontSize="xl" fontWeight={"600"} margin={"10px 0"}>
         Your Requests
       </Text>
-      {filteredRequests.length ? (
+      {filteredRequests?.length ? (
         filteredRequests.map((item) => (
           <RequestCard key={item.id} item={item} />
         ))
